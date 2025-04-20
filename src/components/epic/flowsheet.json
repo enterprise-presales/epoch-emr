@@ -1,0 +1,62 @@
+{
+  "type": "object",
+  "description": "Follow the instructions carefully. Do not make any assumptions.\n\n- The History of Patient Illness section should only have details reported by the patient. It should not have any advice, assessment, suggestions, future tests, prescribed medicines, future vaccinations, future plans or future appointments.\n\n- The Assessment & Plan section should have the observations, advice, future tests, prescriptions, future vaccinations, future appointments, conclusions, future plans, assessments and treatment plans made by the doctor. Never infer anything in the Assessment & Plan.",
+  "properties": {
+    "History of Present Illness": {
+      "type": "string",
+      "title": "History of Present Illness",
+      "description": "Provide a concise overview of the patient's subjective complaints and health history as reported by the patient. This includes the Chief Complaint / Reason for Visit and History of Present Illness (HPI) from the Family Medicine template, ensuring only patient-reported information is included. Exclude any diagnostic opinions, assessments, or future plans."
+    },
+    "Physical Examination": {
+      "type": "string",
+      "title": "Physical Examination",
+      "description": "Include detailed physical examination findings organized by system. Incorporate the Physical Examination section from the Family Medicine template, ensuring objective observations made by the healthcare provider are documented. Use the specified format: 'System: Findings.' Ensure all relevant systems are covered, and include default descriptions where necessary."
+    },
+    "Results": {
+      "type": "string",
+      "title": "Results",
+      "description": "Include all quantitative findings from the discussion and any other objective data. This encompasses the Laboratory, Diagnostic, and Imaging Data from the Family Medicine template, ensuring only results from the current encounter are documented. Exclude results from previous visits."
+    },
+    "Assessment & Plan": {
+      "type": "string",
+      "title": "Assessment & Plan",
+      "description": "Group this section by problem/diagnosis. List each problem/diagnosis in a numbered list and include bullet point details below. Provide a comprehensive Assessment & Plan based on the patient's current condition. This should include the Assessment and Plan sections from the Family Medicine template, such as Diagnosis, Rationale, Management Plan (including Diagnostic Tests, Medications, Lifestyle Modifications, Patient Education, Follow-Up), Risk Assessment, and Problem List. Ensure all future actions, prescriptions, and plans are detailed here and not in the History of Present Illness."
+    },
+    "Attestation": {
+      "type": "string",
+      "title": "Attestation",
+      "description": "MUST ONLY RETURN THE FOLLOWING SENTENCE: I have reviewed the documentation and agree with the content as written."
+    },
+    "orders_list": {
+      "type": "object",
+      "title": "orders_to_queue",
+      "description": "Structured values extracted from the visit for all orders that need to be placed for medication, vaccination. Do not list procedures, referrals, or anything that is not medication.",
+      "properties": {
+        "orders": {
+          "type": "array",
+          "title": "orders",
+          "description": "Be very precise. Put the name of the product and, if applicable the dosage, into order in the array. Do not put in any other information.",
+          "default": []
+        }
+      }
+    },
+    "problems_list": {
+      "type": "object",
+      "title": "problems_list",
+      "description": "Structured values extracted from the visit for all problems the patient is currently experiencing.",
+      "properties": {
+        "problems": {
+          "type": "array",
+          "title": "problems",
+          "description": "For each problem, be very precise but biref",
+          "default": []
+        }
+      }
+    },
+    "education_instructions" : {
+      "type": "string",
+      "title": "education_instructions",
+      "description": "Extract and summarize all relevant patient instructions and/or education."
+    }
+  }
+}

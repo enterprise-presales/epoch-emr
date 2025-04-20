@@ -1,0 +1,81 @@
+{
+    "patientAgeMonths": 26,
+    "visitType": "Well Child Visit",
+    "vitals": {
+      "temperatureF": 98.6,
+      "heartRateBpm": 100,
+      "respiratoryRate": 24,
+      "bloodPressure": "95/55"
+    },
+    "growthAndNutrition": {
+      "appetite": "Good",
+      "diet": "Eats fruits, yogurt, pasta; vegetables challenging"
+    },
+    "physicalDevelopment": {
+      "grossMotor": {
+        "runs": true,
+        "climbsStairs": "Yes, while holding on",
+        "climbsFurniture": true
+      },
+      "fineMotor": {
+        "documented": false
+      }
+    },
+    "languageDevelopment": {
+      "saysMultipleWords": true,
+      "combinesTwoToThreeWords": true,
+      "followsTwoStepInstructions": true
+    },
+    "cognitiveSocialDevelopment": {
+      "playsNearOtherChildren": true,
+      "learningToShare": true
+    },
+    "immunizations": [
+      {
+        "vaccine": "Hepatitis A (Dose 2)",
+        "administered": true
+      },
+      {
+        "vaccine": "Influenza",
+        "administered": true
+      }
+    ],
+    "screenings": {
+      "vision": "Normal",
+      "hearing": "Not Documented"
+    },
+    "oralHealth": {
+      "brushingFrequency": "Twice daily",
+      "fluorideToothpasteUse": "Yes (rice grain size)",
+      "firstDentalVisitScheduled": false,
+      "dentalReferralProvided": true,
+      "visibleCavities": false
+    },
+    "toileting": {
+      "pottyTraining": "In progress",
+      "guidanceProvided": true
+    },
+    "safetyAndGuidance": {
+      "homeSafetyDiscussed": true,
+      "screenTimeDiscussed": true,
+      "dietGuidance": "Encouraged varied diet",
+      "activityGuidance": "Encouraged physical activity",
+      "readingEncouraged": true,
+      "sippyCupUseGuidance": "Limit to daytime only"
+    },
+    "familyHistory": {
+      "asthma": true,
+      "seasonalAllergies": true,
+      "diabetesPaternalSide": true,
+      "maternalSideHealthy": true
+    },
+    "referralsAndEducation": {
+      "pediatricDentalReferral": true,
+      "oralHealthInstructionsGiven": true,
+      "pottyTrainingSupportDiscussed": true
+    },
+    "assessment": {
+      "overallHealthStatus": "Healthy, age-appropriate development",
+      "acuteConcerns": false
+    }
+  }

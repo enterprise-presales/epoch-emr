@@ -1,6 +1,7 @@
 import { Check, X, Bold, Italic, AlignLeft, Plus, Share2, Lock, Edit3, AlertTriangle, Mail, FileText } from "lucide-react";
 import { ResizablePanel } from "@/components/ui/resizable";
 import { useState } from "react";
+import { useFlowsheet } from "@/AutoFillContexts";
 
 const ProgressNotes = () => {
   // State for the sectioned view
@@ -9,6 +10,17 @@ const ProgressNotes = () => {
   const [results, setResults] = useState("");
   const [assessmentPlan, setAssessmentPlan] = useState("");
   const [attestation, setAttestation] = useState("");
+  const [flowsheet, setFlowsheet] = useState("")
+  const [orderslist, setOrderslist] = useState("")
+  const [problemslist, setProblemslist] = useState("")
+  const [educationInstructions, setEducationInstructions] = useState("")
+  const [procedureNote, setProcedureNote] = useState("")
+  const { setFlowsheet: setFlowsheetContext } = useFlowsheet();
+  const { setOrdersList: setOrdersListContext } = useFlowsheet();
+  const { setProblemsList: setProblemsListContext } = useFlowsheet();
+  const { setEducationInstructions: setEducationInstructionsContext } = useFlowsheet();
+  const { setProcedureNote: setProcedureNoteContext } = useFlowsheet();
+
   
   // State for the template view
   const [templateContent, setTemplateContent] = useState("");
@@ -35,6 +47,36 @@ Attestation
   // State for the my note view
   const [myNoteContent, setMyNoteContent] = useState(defaultMyNoteTemplate);
 
+  const handleFillFlowsheet = () => {
+    setFlowsheetContext(flowsheet)
+    console.log("set flowsheet context")
+    console.log(flowsheet)
+  }
+
+  const handleFillOrderQueue = () => {
+    setOrdersListContext(orderslist)
+    console.log("set order list context")
+    console.log(orderslist)
+  }
+
+  const handleFillProblemsList = () => {
+    setProblemsListContext(problemslist)
+    console.log("set problems list context")
+    console.log(problemslist)
+  }
+
+  const handleFillEducationInstructions = () => {
+    setEducationInstructionsContext(educationInstructions)
+    console.log("set education instructions")
+    console.log(educationInstructions)
+  }
+
+  const handleFillProcedureNote = () => {
+    setProcedureNoteContext(procedureNote)
+    console.log("set procedure note")
+    console.log(procedureNote)
+  }
+
   const parseClipboardContent = (clipboardData: string) => {
     console.log("Parsing clipboard data:", clipboardData);
     
@@ -44,7 +86,13 @@ Attestation
       { header: 'Physical Examination:', setter: setPhysicalExam, key: 'pe' },
       { header: 'Results:', setter: setResults, key: 'results' },
       { header: 'Assessment & Plan:', setter: setAssessmentPlan, key: 'assessment' },
-      { header: 'Attestation:', setter: setAttestation, key: 'attestation' }
+      { header: 'Attestation:', setter: setAttestation, key: 'attestation' },
+      { header: 'flowsheet:', setter: setFlowsheet, key: 'flowsheet' },
+      { header: 'orders_list:', setter: setOrderslist, key: 'orders_list' },
+      { header: 'problems_list:', setter: setProblemslist, key: 'problems_list' },
+      { header: 'education_instructions:', setter: setEducationInstructions, key: 'education_instructions' },
+      { header: 'procedure_note:', setter: setProcedureNote, key: 'procedure_note' }
+
     ];
     
     try {
@@ -83,11 +131,10 @@ Attestation
       
       // Set the state for each section with its collected content
       sections.forEach(section => {
-        if (sectionContents[section.key].length > 0) {
-          const content = sectionContents[section.key].join('\n');
-          section.setter(content);
-          console.log(`Setting ${section.key} to:`, content);
-        }
+        const contentLines = sectionContents[section.key];
+        const content = contentLines.length > 0 ? contentLines.join('\n') : '';
+      
+        section.setter(content);
       });
       
       // Check if any sections are missing
@@ -251,7 +298,8 @@ I have reviewed the documentation and agree with the content as written.`;
         { header: 'Physical Examination:', marker: '[.PESEC-EPIC#31000231850]', key: 'pe' },
         { header: 'Results:', marker: '[.RESULTSEC-EPIC#31000231851]', key: 'results' },
         { header: 'Assessment & Plan:', marker: '[.APSEC-EPIC#31000231852]', key: 'assessment' },
-        { header: 'Attestation:', marker: '[.ATTESTSEC-EPIC#31000231857]', key: 'attestation' }
+        { header: 'Attestation:', marker: '[.ATTESTSEC-EPIC#31000231857]', key: 'attestation' },
+        { header: 'Flowsheet:', marker: '[.ATTESTSEC-EPIC#31000231857]', key: 'flowsheet' },
       ];
       
       // Extract section content from clipboard data (excluding section titles)
@@ -435,6 +483,7 @@ I have reviewed the documentation and agree with the content as written.`;
         return;
       }
       
+      // standard flow
       try {
         // Read from clipboard
         console.log("Attempting to read from clipboard...");
@@ -444,6 +493,7 @@ I have reviewed the documentation and agree with the content as written.`;
         if (activeView === "sectioned") {
           // For sectioned view, parse the clipboard content
           parseClipboardContent(clipboardText);
+          console.log(orderslist)
         } else if (activeView === "template") {
           // For template view, set the template content directly
           setTemplateContent(clipboardText);
@@ -592,6 +642,22 @@ I have reviewed the documentation and agree with the content as written.`;
             <div className="pt-4 pb-4">
               <h3 className="font-bold mb-2 text-[#333]">Attestation:</h3>
               <textarea value={attestation} onChange={e => setAttestation(e.target.value)} onPaste={handlePaste} className="w-full min-h-[60px] p-2 text-sm border border-[#999] bg-[#f8f8f8] text-[#666] font-sans" />
+            </div>
+
+            <div className="pt-4 pb-4">
+              <button className="py-2 px-4 bg-green-100" onClick={handleFillFlowsheet}>Fill out flowsheet</button>
+            </div>
+            <div className="pt-4 pb-4">
+              <button className="py-2 px-4 bg-green-100" onClick={handleFillOrderQueue}>Fill order queue</button>
+            </div>
+            <div className="pt-4 pb-4">
+              <button className="py-2 px-4 bg-green-100" onClick={handleFillProblemsList}>Fill problems list</button>
+            </div>
+            <div className="pt-4 pb-4">
+              <button className="py-2 px-4 bg-green-100" onClick={handleFillEducationInstructions}>Fill education / instructions</button>
+            </div>
+            <div className="pt-4 pb-4">
+              <button className="py-2 px-4 bg-green-100" onClick={handleFillProcedureNote}>Fill procedure note</button>
             </div>
           </div>
         ) : activeView === "template" ? (
