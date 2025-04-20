@@ -1,0 +1,184 @@
+
+
+{
+    "properties": {
+      "reasonForVisit": {
+        "type": "string",
+        "title": "Reason for Visit",
+        "description": "State that the child is presenting for a routine well-child visit. If the caregiver mentions any specific concerns, note them here. If no concerns, note 'No specific concerns, routine preventive visit.'",
+        "default": "Routine preventative vist. No specific concerns."
+      },
+      "healthHistory": {
+        "type": "string",
+        "title": "Health History",
+        "description": "Document the child's health history. If the mother had a condition with the child include it here, but be sure to assign it to the mother as the patient. example: Sophia had complications with preclampsia during pregnancy with Mateo."
+      },
+      "physicalDevelopmentHistory": {
+        "type": "string",
+        "title": "Physical Development History",
+        "description": "Document the child's physical development history, including growth parameters (weight, length/height, head circumference if applicable, BMI percentile), and compare with standardized charts. Discuss trends and review dietary habits, feeding patterns, and nutritional intake."
+      },
+      "mentalDevelopmentHistory": {
+        "type": "string",
+        "title": "Mental Development History",
+        "description": "Assess age-appropriate milestones in gross motor, fine motor, language, social-emotional, and cognitive domains. Use standardized screening tools if applicable. Document caregiver’s perspective and any developmental or behavioral concerns."
+      },
+      "prenatalBirthAndNeonatalHistory": {
+        "type": "string",
+        "title": "Prenatal, Birth, and Neonatal History",
+        "description": "Include if relevant to the child's current health. Document prenatal complications, birth history, and neonatal issues. If not relevant or previously documented with no changes, may omit."
+      },
+      "physicalExamination": {
+        "type": "string",
+        "title": "Physical Examination",
+        "description": "Record vital signs, growth parameters (plotted on growth charts), and head-to-toe exam findings in bullet format. Do not add any additional comment unless any deviations from normal development or expected findings for the child’s age. This should fulfill the DHCS requirement for a physical exam."
+      },
+      "growthAndNutritionAssessment": {
+        "type": "string",
+        "title": "Growth and Nutrition Assessment",
+        "description": "This section is now covered under 'Physical Development History'. Do not include as a separate section."
+      },
+      "preventiveCareImmunizationsAndScreeningTests": {
+        "type": "string",
+        "title": "Preventive Care: Immunizations and Screening Tests",
+        "description": "Review and update immunizations per recommended schedule. Document administered vaccines, including dose, route, and site. Note results of screening tests (e.g., vision, hearing, lead, anemia) performed at this visit."
+      },
+      "healthEducationAnticipatoryGuidance": {
+        "type": "string",
+        "title": "Health Education/Anticipatory Guidance",
+        "description": "Provide age-appropriate guidance on developmental changes, injury prevention, sleep routines, discipline, parenting strategies, and media usage. Discuss recommended safety measures (e.g., car seats, helmets, home safety). This fulfills the DHCS requirement for health education/anticipatory guidance."
+      },
+      "oralHealth": {
+        "type": "string",
+        "title": "Oral Health",
+        "description": "Include any detail around discussion of oral health, tooth brushing, whether they've visited the dentist yet, and guidance on oral health for the child."
+      },
+      "psychosocialAndFamilyHealth": {
+        "type": "string",
+        "title": "Psychosocial and Family Health",
+        "description": "Assess the home environment, caregiver well-being, and any social stressors (food security, housing stability). Screen for parental depression if recommended and refer to community resources as needed."
+      },
+      "schoolReadinessAndEarlyLearning": {
+        "type": "string",
+        "title": "School Readiness, Early Learning (If Age-Appropriate)",
+        "description": "For children approaching preschool or school age, discuss readiness, language development, pre-literacy, and social skills. Address caregiver concerns about learning or attention difficulties. If not age-appropriate, may omit, and indicate the patient's current age."
+      },
+      "lifestyleCounseling": {
+        "type": "string",
+        "title": "Lifestyle Counseling",
+        "description": "Encourage regular physical activity, age-appropriate play, limited screen time, and active family routines. Reinforce healthy eating habits: balanced meals, proper portions, and reducing sugary beverages."
+      },
+      "reviewOfSystems": {
+        "type": "string",
+        "title": "Review of Systems (ROS)",
+        "description": "Focus on any minor concerns mentioned. If no issues, state: 'No acute symptoms reported.'"
+      },
+      "laboratoryAndDiagnosticData": {
+        "type": "string",
+        "title": "Laboratory and Diagnostic Data",
+        "description": "Include results of any screening labs or tests performed (e.g., hemoglobin, lead level). If no labs indicated, please state this."
+      },
+      "assessmentImpression": {
+        "type": "string",
+        "title": "Assessment / Impression",
+        "description": "Summarize overall health status, growth, development, immunization status, and any concerns. If all is normal, state that the child appears healthy and is developing appropriately."
+      },
+      "plan": {
+        "type": "string",
+        "title": "Plan",
+        "description": "Outline follow-up for any concerns, referrals for developmental or specialty evaluations, immunizations given, tests performed, and guidance provided. Include timing for next routine visit."
+      },
+      "patientAndCaregiverInstructions": {
+        "type": "string",
+        "title": "Patient and Caregiver Instructions",
+        "description": "Provide clear instructions on nutrition, activity, sleep, oral health, and safety. Offer educational materials on developmental milestones. Advise on when to contact the office if concerns arise."
+      },
+      "patientEducationMaterials": {
+        "type": "string",
+        "title": "Patient Education Materials",
+        "description": "List any handouts or reputable websites provided. Ensure caregiver understanding and address any questions."
+      },
+"flowsheet": {
+  "type": "object",
+  "title": "Pediatric Flowsheet",
+  "description": "Structured values extracted from the visit note for Epic flowsheet integration.",
+  "properties": {
+    "patientAgeMonths": {
+      "type": "integer",
+      "title": "Patient Age (months)",
+      "default": 26
+    },
+    "vitals": {
+      "type": "object",
+      "title": "Vitals",
+      "properties": {
+        "temperatureF": { "type": "number", "title": "Temperature (F)", "default": 0 },
+        "heartRateBpm": { "type": "number", "title": "Heart Rate (BPM)", "default": 0 },
+        "respiratoryRate": { "type": "number", "title": "Respiratory Rate", "default": 0 },
+        "bloodPressure": { "type": "string", "title": "Blood Pressure", "default": "na" }
+      }
+    },
+    "physicalDevelopment": {
+      "type": "object",
+      "title": "Physical Development",
+      "properties": {
+        "running": { "type": "string", "title": "Running", "default": "na" },
+        "climbing": { "type": "string", "title": "Climbing", "default": "na" },
+        "appetite": { "type": "string", "title": "Appetite", "default": "na" }
+      }
+    },
+    "languageDevelopment": {
+      "type": "object",
+      "title": "Language Development",
+      "properties": {
+        "saysMultipleWords": { "type": "string", "title": "Says multiple words", "default": "na" },
+        "combinesTwoToThreeWords": { "type": "string", "title": "Combines 2–3 words", "default": "na" },
+        "followsTwoStepInstructions": { "type": "string", "title": "Follows 2-step instructions", "default": "na" }
+      }
+    },
+    "socialDevelopment": {
+      "type": "object",
+      "title": "Social Development",
+      "properties": {
+        "playsNearOtherChildren": { "type": "string", "title": "Plays near other children", "default": "na" },
+        "learningToShare": { "type": "string", "title": "Learning to share", "default": "na" }
+      }
+    },
+    "immunizationsGivenToday": {
+      "type": "array",
+      "title": "Immunizations Given Today",
+      "items": { "type": "string" },
+      "default": ["na"]
+    },
+    "visionScreening": {
+      "type": "string",
+      "title": "Vision Screening",
+      "enum": ["Normal", "Abnormal", "Not Performed"],
+      "default": "na"
+    },
+    "oralHealth": {
+      "type": "object",
+      "title": "Oral Health",
+      "properties": {
+        "brushingFrequency": {
+          "type": "string",
+          "title": "Brushing Frequency",
+          "default": "na"
+        },
+        "visibleCavities": { "type": "string", "title": "Visible Cavities", "default": "na" }
+      }
+    },
+    "familyHistory": {
+      "type": "object",
+      "title": "Family History",
+      "properties": {
+        "asthma": { "type": "string", "title": "Asthma", "default": "na" },
+        "seasonalAllergies": { "type": "string", "title": "Seasonal Allergies", "default": "na" },
+        "diabetes": { "type": "string", "title": "Diabetes", "default": "na" },
+        "maternalSideHealthy": { "type": "string", "title": "Maternal Side Healthy", "default": "na" }
+      }
+    }
+  }
+}
+    }
+  }

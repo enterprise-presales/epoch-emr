@@ -6,11 +6,13 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Auth from "./Auth";
+import { FlowsheetProvider } from "./AutoFillContexts";
 
 const queryClient = new QueryClient();
 
 const App = () => {
   return (
+    <FlowsheetProvider>
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
@@ -24,6 +26,7 @@ const App = () => {
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
+    </FlowsheetProvider>
   );
 };
 

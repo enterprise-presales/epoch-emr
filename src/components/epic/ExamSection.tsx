@@ -2,8 +2,26 @@ import { ResizablePanel, ResizablePanelGroup, ResizableHandle } from "@/componen
 import { LayoutGrid, FileText, BarChart, Eye, Circle, MoreHorizontal, Glasses, CrosshairIcon, TestTubes, CheckCircle, ChevronDown, File, Settings, Search, RotateCcw, RotateCw, HelpCircle, PlusCircle } from "lucide-react";
 import { useState, useCallback, useEffect } from "react";
 import ConditionList from "./ConditionList";
+import React from "react";
+import { useFlowsheet } from "@/AutoFillContexts";
+import WrapUp from "../ui/wrapup";
+import ProcedureNote from "../ui/procedurenote";
+
+
 
 const ExamSection = () => {
+
+  const { flowsheet: flowsheetContext } = useFlowsheet();
+  let parsedFlowsheet: Record<string, any> = {};
+  
+  try {
+    if (flowsheetContext && flowsheetContext.trim() !== "") {
+      parsedFlowsheet = JSON.parse(flowsheetContext);
+    }
+  } catch (err) {
+    console.warn("Invalid JSON in flowsheet context:", err);
+  }
+  
   const [conditionsData, setConditionsData] = useState([
     { name: 'Clear incision', buttons: [] },
     { name: 'Debris in tear film', buttons: [] },
@@ -25,6 +43,70 @@ const ExamSection = () => {
     { name: 'Striae', buttons: ['1+', '2+', '3+', '4+'] },
     { name: 'Trauma', buttons: ['Laceration', 'Foreign'] }
   ]);
+
+  const flowsheetSections = [
+    {
+      title: "vitals",
+      rows: [
+        "temperatureF",
+        "heartRateBpm",
+        "respiratoryRate",
+        "bloodPressure"
+      ]
+    },
+    {
+      title: "physicalDevelopment",
+      rows: ["running", "climbing", "appetite"]
+    },
+    {
+      title: "languageDevelopment",
+      rows: ["saysMultipleWords", "combinesTwoToThreeWords", "followsTwoStepInstructions"]
+    },
+    {
+      title: "socialDevelopment",
+      rows: ["playsNearOtherChildren", "learningToShare"]
+    },
+    {
+      title: "immunizations",
+      rows: ["immunizationsGivenToday"]
+    },
+    {
+      title: "vision",
+      rows: [
+        "visionScreening"
+      ]
+    },
+    {
+      title: "oralHealth",
+      rows: ["brushingFrequency", "visibleCavities"]
+    },
+    {
+      title: "familyHistory",
+      rows: ["asthma", "seasonalAllergies", "diabetes", "cancer"]
+    }
+  ];
+
+  const [selectedSections, setSelectedSections] = useState(
+    flowsheetSections.map((section) => section.title)
+  );
+
+  const toggleSection = (title) => {
+    setSelectedSections((prev) =>
+      prev.includes(title)
+        ? prev.filter((t) => t !== title)
+        : [...prev, title]
+    );
+  };
+
+  const showAll = () => {
+    setSelectedSections(flowsheetSections.map((section) => section.title));
+  };
+
+  const hideAll = () => {
+    setSelectedSections([]);
+  };
+  
+  
 
   const [examType, setExamType] = useState<string>("Clinic Visit");
   const [checkedConditions, setCheckedConditions] = useState<string[]>([]);
@@ -89,6 +171,9 @@ const ExamSection = () => {
             >
               <option value="Clinic Visit">Clinic Visit</option>
               <option value="Eye Exam">Eye Exam</option>
+              <option value="Flowsheets">Flowsheets</option>
+              <option value="Wrap Up">Wrap Up</option>
+              <option value="Procedure Note">Procedure Note</option>
             </select>
           </div>
         </div>
@@ -100,21 +185,48 @@ const ExamSection = () => {
               alt="Eye Exam"
               className="h-12"
             />
-          ) : (
+          ) : examType === "Clinic Visit" ? (
             <img
               src="/lovable-uploads/clinic_visit.png"
               alt="Clinic Visit"
               className="h-12"
             />
-          )}
+          ) : examType === "Flowsheets" ? (
+            <img
+              src="/lovable-uploads/flowsheets.png"
+              alt="Flowsheets"
+              className="h-12"
+            />
+          ) : examType === "Wrap Up" ? (
+            <img
+            src="/lovable-uploads/wrapup.png"
+            alt="Wrapup"
+            className="h-12"
+          />
+          ) : (
+            <img
+            src="/lovable-uploads/procedurenote.png"
+            alt="Wrapup"
+            className="h-12"
+          />
+          )
+        
+        }
         </div>
 
         <div className="flex border-b border-gray-200">
-          <button className="inline-flex items-center px-2 py-0.5 text-sm border-r border-gray-200 relative before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-blue-500">
-            <span className="text-blue-600">Main Menu</span>
-          </button>
+          {examType === "Clinic Visit" && (
+            <>
+              <button className="inline-flex items-center px-2 py-0.5 text-sm border-r border-gray-200 relative before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-blue-500">
+                <span className="text-blue-600">Main Menu</span>
+              </button>
+            </>
+          )}
           {examType === "Eye Exam" && (
             <>
+              <button className="inline-flex items-center px-2 py-0.5 text-sm border-r border-gray-200 relative before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-blue-500">
+                <span className="text-blue-600">Main Menu</span>
+              </button>
               <button className="inline-flex items-center px-2 py-0.5 text-sm border-r border-gray-200 gap-1 text-gray-600">
                 <Glasses className="h-4 w-4" />
                 <span>Contact Lens</span>
@@ -129,25 +241,49 @@ const ExamSection = () => {
               </button>
             </>
           )}
+          {examType === "Flowsheets" && (
+            <>
+              <button className="inline-flex items-center px-2 py-0.5 text-sm border-r border-gray-200 relative before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-blue-500">
+                <span className="text-blue-600">Vitals (ICU)</span>
+              </button>
+              <button className="inline-flex items-center px-2 py-0.5 text-sm border-r border-gray-200 gap-1 text-gray-600">
+                <span>Vent Doc</span>
+              </button>
+              <button className="inline-flex items-center px-2 py-0.5 text-sm border-r border-gray-200 gap-1 text-gray-600">
+                <span>Vitals</span>
+              </button>
+              <button className="inline-flex items-center px-2 py-0.5 text-sm gap-1 text-gray-600">
+                <span>Lines/Drains/Airways</span>
+              </button>
+            </>
+          )}
         </div>
         
         <ResizablePanelGroup direction="horizontal" className="flex flex-1">
           <ResizablePanel defaultSize={65} minSize={30}>
             <div className="p-2">
               <div className="space-y-3 text-xs">
-                <div className="exam-grid items-start">
-                  <div className="flex items-center gap-1 text-gray-600 justify-start">
-                    <CheckCircle className="h-4 w-4 text-green-500" />
-                    <span className="text-xs">Exam Normal</span>
-                    <ChevronDown className="h-4 w-4" />
-                    <div className="flex items-center gap-1 text-gray-400 ml-auto">
-                      <File className="h-3 w-3" />
-                      <span className="text-xs">Copy Previous</span>
+              
+                 {(examType === "Clinic Visit" || examType === "Eye Exam") && (
+                    <div className="exam-grid items-start">
+                      <div className="flex items-center gap-1 text-gray-600 justify-start">
+                        <CheckCircle className="h-4 w-4 text-green-500" />
+                        <span className="text-xs">Exam Normal</span>
+                        <ChevronDown className="h-4 w-4" />
+                        <div className="flex items-center gap-1 text-gray-400 ml-auto">
+                          <File className="h-3 w-3" />
+                          <span className="text-xs">Copy Previous</span>
+                        </div>
+                      </div>
+                      <div className="exam-column"></div>
+                      <div className="exam-column"></div>
                     </div>
-                  </div>
-                  <div className="exam-column"></div>
-                  <div className="exam-column"></div>
-                </div>
+                 )}
+
+                    
+               
+
+                
 
                 {examType === "Eye Exam" ? (
                   <>
@@ -240,7 +376,7 @@ const ExamSection = () => {
                     </div>
                     <hr className="w-full" />
                   </>
-                ) : (
+                ) : examType === "Clinic Visit" ? (
                   // Clinic Visit View based on image
                   <div className="grid grid-cols-2 gap-4">
                     {/* Left Column */}
@@ -437,22 +573,111 @@ const ExamSection = () => {
                       </div>
                     </div>
                   </div>
-                )}
-                
-                <div>
-                  <div style={{textAlign: 'left'}}>
-                    <img
-                      src="/lovable-uploads/menu.png"
-                      alt="Menu Bar"
-                      className="h-6 object-contain"
-                      style={{ display: 'block', marginLeft: '0', maxWidth: '100%' }}
-                    />
+                ) : examType === "Flowsheets" ? (
+                  // FLOWSHEET SECTION
+                  <div className="min-h-screen min-w-screen bg-white text-xs text-black font-sans py-4 px-2 flex">
+                  {/* Left Panel */}
+                  <div className="w-[200px] border border-gray-300 mr-2">
+
+                    <div className="flex items-center justify-between px-2 py-1 text-[11px] border-b border-gray-300">
+                      <input
+                        type="text"
+                        className="text-[11px] border border-gray-300 rounded px-1 w-full"
+                        placeholder="Search (Alt+Comma)"
+                      />
+                    </div>
+                    <div className="flex justify-between px-2 py-1 border-b border-gray-300 text-[11px]">
+                      <span className="text-blue-700 cursor-pointer" onClick={hideAll}>
+                        Hide All
+                      </span>
+                      <span className="text-blue-700 cursor-pointer" onClick={showAll}>
+                        Show All
+                      </span>
+                    </div>
+                    {flowsheetSections.map((section) => (
+                      <div key={section.title} className="flex items-center px-2 py-1 border-b border-gray-200">
+                        <input
+                          type="checkbox"
+                          checked={selectedSections.includes(section.title)}
+                          onChange={() => toggleSection(section.title)}
+                          className="mr-2"
+                        />
+                        <span className="text-[11px]">{section.title}</span>
+                      </div>
+                    ))}
                   </div>
-                  <textarea
-                    className="w-full p-1 border rounded-b-md h-24 text-xs"
-                    placeholder="Additional notes..."
-                  ></textarea>
+            
+                  {/* Flowsheet Grid */}
+                  <div className="flex-1 space-y-0">
+                    {flowsheetSections
+                      .filter((section) => selectedSections.includes(section.title))
+                      .map((section) => (
+                        <div key={section.title}>
+                          <div className="grid grid-cols-[200px_1fr_100px] border border-gray-300">
+                            {/* Header Row */}
+                            <div className="bg-[#BFDCEF] font-semibold p-2 border-r border-gray-300">
+                              {section.title}
+                            </div>
+                            <div className="bg-[#BFDCEF] font-semibold p-2 border-r border-gray-300"></div>
+                            <div className="bg-[#BFDCEF] font-semibold p-2">Last Filed</div>
+
+                            {/* Rows */}
+                            {section.rows.map((label) => {
+                              let value = "";
+
+                              const sectionData = parsedFlowsheet?.[section.title];
+                              if (typeof sectionData === "object" && sectionData !== null) {
+                                value = sectionData[label] ?? "";
+                              } else if (typeof sectionData !== "object") {
+                                value = label === section.title ? sectionData : "";
+                              }
+
+                              return (
+                                <React.Fragment key={label}>
+                                  <div className="bg-[#D9E8F3] border-t border-gray-300 p-2">{label}</div>
+                                  <input
+                                    className="bg-[#EBF4F9] border-t border-l border-gray-300 p-1"
+                                    type="text"
+                                    defaultValue={value}
+                                  />
+                                  <div className="bg-[#D9E8F3] border-t border-l border-gray-300 p-2 text-gray-400 italic">
+                                    —
+                                  </div>
+                                </React.Fragment>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      ))}
+                  </div>
                 </div>
+
+
+
+                ) : examType === "Wrap Up" ? (
+                    <WrapUp/>
+                ) : examType === "Procedure Note" ? (
+                  <ProcedureNote/>
+                )
+                : null}
+                
+                {(examType === "Clinic Visit" || examType === "Eye Exam") && (
+                  <div>
+                    <div style={{textAlign: 'left'}}>
+                      <img
+                        src="/lovable-uploads/menu.png"
+                        alt="Menu Bar"
+                        className="h-6 object-contain"
+                        style={{ display: 'block', marginLeft: '0', maxWidth: '100%' }}
+                      />
+                    </div>
+                    <textarea
+                      className="w-full p-1 border rounded-b-md h-24 text-xs"
+                      placeholder="Additional notes..."
+                    ></textarea>
+                  </div>
+                )}
+
               </div>
             </div>
           </ResizablePanel>
