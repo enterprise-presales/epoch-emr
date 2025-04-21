@@ -11,7 +11,9 @@ interface FlowsheetContextType {
   educationInstructions: string;
   setEducationInstructions: (education: string) => void;
   procedureNote: string;
-  setProcedureNote: (procedurenote: string) => void;
+  setProcedureNote: (medrecon: string) => void;
+  medRecon: string;
+  setMedRecon: (medrecon: string) => void;
 }
 
 // Create the context
@@ -24,9 +26,10 @@ export const FlowsheetProvider = ({ children }: { children: ReactNode }) => {
   const [problemsList, setProblemsList] = useState<string>("");
   const [educationInstructions, setEducationInstructions] = useState<string>("");
   const [procedureNote, setProcedureNote] = useState<string>("");
+  const [medRecon, setMedRecon] = useState<string>("");
 
   return (
-    <FlowsheetContext.Provider value={{ flowsheet, setFlowsheet, ordersList, setOrdersList, problemsList, setProblemsList, educationInstructions, setEducationInstructions, procedureNote, setProcedureNote}}>
+    <FlowsheetContext.Provider value={{ flowsheet, setFlowsheet, ordersList, setOrdersList, problemsList, setProblemsList, educationInstructions, setEducationInstructions, procedureNote, setProcedureNote, medRecon, setMedRecon}}>
       {children}
     </FlowsheetContext.Provider>
   );

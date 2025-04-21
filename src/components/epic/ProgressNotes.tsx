@@ -2,6 +2,7 @@ import { Check, X, Bold, Italic, AlignLeft, Plus, Share2, Lock, Edit3, AlertTria
 import { ResizablePanel } from "@/components/ui/resizable";
 import { useState } from "react";
 import { useFlowsheet } from "@/AutoFillContexts";
+import panicNotes from "../../utils/panicNotes"
 
 const ProgressNotes = () => {
   // State for the sectioned view
@@ -15,11 +16,16 @@ const ProgressNotes = () => {
   const [problemslist, setProblemslist] = useState("")
   const [educationInstructions, setEducationInstructions] = useState("")
   const [procedureNote, setProcedureNote] = useState("")
+  const [medRecon, setMedRecon] = useState("")
   const { setFlowsheet: setFlowsheetContext } = useFlowsheet();
   const { setOrdersList: setOrdersListContext } = useFlowsheet();
   const { setProblemsList: setProblemsListContext } = useFlowsheet();
   const { setEducationInstructions: setEducationInstructionsContext } = useFlowsheet();
   const { setProcedureNote: setProcedureNoteContext } = useFlowsheet();
+  const { setMedRecon: setMedReconContext } = useFlowsheet();
+
+  // panic state
+  const [panicScenario, setPanicScenario] = useState("")
 
   
   // State for the template view
@@ -77,6 +83,17 @@ Attestation
     console.log(procedureNote)
   }
 
+  const handleFillMedRecon = () => {
+    setMedReconContext(medRecon)
+    console.log("set med recon")
+    console.log(medRecon)
+  }
+
+  const handleFillPanic = (number) => {
+    console.log(panicNotes[number])
+    parseClipboardContent(panicNotes[number])
+  }
+
   const parseClipboardContent = (clipboardData: string) => {
     console.log("Parsing clipboard data:", clipboardData);
     
@@ -91,7 +108,8 @@ Attestation
       { header: 'orders_list:', setter: setOrderslist, key: 'orders_list' },
       { header: 'problems_list:', setter: setProblemslist, key: 'problems_list' },
       { header: 'education_instructions:', setter: setEducationInstructions, key: 'education_instructions' },
-      { header: 'procedure_note:', setter: setProcedureNote, key: 'procedure_note' }
+      { header: 'procedure_note:', setter: setProcedureNote, key: 'procedure_note' },
+      { header: 'med_recon:', setter: setMedRecon, key: 'med_recon' }
 
     ];
     
@@ -658,6 +676,28 @@ I have reviewed the documentation and agree with the content as written.`;
             </div>
             <div className="pt-4 pb-4">
               <button className="py-2 px-4 bg-green-100" onClick={handleFillProcedureNote}>Fill procedure note</button>
+            </div>
+            <div className="pt-4 pb-4">
+              <button className="py-2 px-4 bg-green-100" onClick={handleFillMedRecon}>Fill med recon</button>
+            </div>
+            {/* panic */}
+            <div className="pt-4 pb-4">
+              <input
+                type="number"
+                min="1"
+                max="10"
+                value={panicScenario}
+                onChange={(e) => setPanicScenario(e.target.value)}
+                placeholder="Enter scenario (1-10)"
+                className="border border-gray-300 px-2 py-1 mr-2 rounded"
+              />
+              <button
+                className="py-2 px-4 bg-green-100 rounded"
+                onClick={() => handleFillPanic(Number(panicScenario))}
+                disabled={Number(panicScenario) < 1 || Number(panicScenario) > 10}
+              >
+                OK
+              </button>
             </div>
           </div>
         ) : activeView === "template" ? (

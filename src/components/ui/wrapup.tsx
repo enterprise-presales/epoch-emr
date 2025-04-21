@@ -20,7 +20,7 @@ const WrapUp = () => {
 
     console.log(orders)
 
-// for problem list
+    // for problem list
     const { problemsList: problemsListContext } = useFlowsheet();
 
     let parsedProblemList: Record<string, any> = {};
@@ -41,6 +41,11 @@ const WrapUp = () => {
     const { educationInstructions: educationInstructionsContext } = useFlowsheet();
     const education = educationInstructionsContext
     console.log(educationInstructionsContext)
+
+    // for med recon
+    const { medRecon: medReconContext } = useFlowsheet();
+    const medrecon = medReconContext
+    console.log(medReconContext)
   
     return (
         <div className="flex w-full p-2 bg-white text-xs font-sans gap-2">
@@ -143,6 +148,17 @@ const WrapUp = () => {
                 </button>
             </div>
             </div>
+
+
+        {/* medication recon */}
+        <div className="border border-gray-300">
+            <div className="bg-blue-100 font-semibold p-1 border-b">Medication Reconciliation</div>
+            <div className="p-1 flex justify-between items-center text-[11px]">
+              <span>Attach reference</span>
+              <button className="text-blue-700 text-xs font-semibold">+ Add Clinical References</button>
+            </div>
+            <textarea className="w-full border border-gray-300 h-28 mt-1 p-1 text-[11px]" value={medrecon} readOnly/>
+          </div>
   
           {/* LOS based on time */}
           <div className="border border-gray-300 p-2 text-[11px]">
