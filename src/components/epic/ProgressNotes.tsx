@@ -606,15 +606,51 @@ I have reviewed the documentation and agree with the content as written.`;
           <div className="flex gap-4">
             <button
               onClick={handleGenerateData}
-              className="text-[#004d92] text-sm hover:underline self-start"
+              className="text-[#004d92] text-xs hover:underline self-start"
             >
               Generate Data
             </button>
             <button
               onClick={handleClearNote}
-              className="text-[#004d92] text-sm hover:underline self-start"
+              className="text-[#004d92] text-xs hover:underline self-start"
             >
               Clear
+            </button>
+            <button
+              onClick={handleFillFlowsheet}
+              className="text-[#004d92] text-xs hover:underline self-start"
+            >
+              Fill flowsheet
+            </button>
+            <button
+              onClick={handleFillOrderQueue}
+              className="text-[#004d92] text-xs hover:underline self-start"
+            >
+              Fill orders
+            </button>
+            <button
+              onClick={handleFillProblemsList}
+              className="text-[#004d92] text-xs hover:underline self-start"
+            >
+              Fill problems
+            </button>
+            <button
+              onClick={handleFillEducationInstructions}
+              className="text-[#004d92] text-xs hover:underline self-start"
+            >
+              Fill education
+            </button>
+            <button
+              onClick={handleFillProcedureNote}
+              className="text-[#004d92] text-xs hover:underline self-start"
+            >
+              Fill procedure note
+            </button>
+            <button
+              onClick={handleFillMedRecon}
+              className="text-[#004d92] text-xs hover:underline self-start"
+            >
+              Fill med recon
             </button>
           </div>
         </div>
@@ -660,25 +696,6 @@ I have reviewed the documentation and agree with the content as written.`;
             <div className="pt-4 pb-4">
               <h3 className="font-bold mb-2 text-[#333]">Attestation:</h3>
               <textarea value={attestation} onChange={e => setAttestation(e.target.value)} onPaste={handlePaste} className="w-full min-h-[60px] p-2 text-sm border border-[#999] bg-[#f8f8f8] text-[#666] font-sans" />
-            </div>
-
-            <div className="pt-4 pb-4">
-              <button className="py-2 px-4 bg-green-100" onClick={handleFillFlowsheet}>Fill out flowsheet</button>
-            </div>
-            <div className="pt-4 pb-4">
-              <button className="py-2 px-4 bg-green-100" onClick={handleFillOrderQueue}>Fill order queue</button>
-            </div>
-            <div className="pt-4 pb-4">
-              <button className="py-2 px-4 bg-green-100" onClick={handleFillProblemsList}>Fill problems list</button>
-            </div>
-            <div className="pt-4 pb-4">
-              <button className="py-2 px-4 bg-green-100" onClick={handleFillEducationInstructions}>Fill education / instructions</button>
-            </div>
-            <div className="pt-4 pb-4">
-              <button className="py-2 px-4 bg-green-100" onClick={handleFillProcedureNote}>Fill procedure note</button>
-            </div>
-            <div className="pt-4 pb-4">
-              <button className="py-2 px-4 bg-green-100" onClick={handleFillMedRecon}>Fill med recon</button>
             </div>
             {/* panic */}
             <div className="pt-4 pb-4">
