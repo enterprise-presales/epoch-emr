@@ -603,57 +603,38 @@ I have reviewed the documentation and agree with the content as written.`;
           <button onClick={handleSyncToEMR} className="bg-[#004d92] text-white px-4 py-2 rounded">
             Sync to EMR
           </button>
-          <div className="flex gap-4">
-            <button
-              onClick={handleGenerateData}
-              className="text-[#004d92] text-xs hover:underline self-start"
-            >
-              Generate Data
-            </button>
-            <button
-              onClick={handleClearNote}
-              className="text-[#004d92] text-xs hover:underline self-start"
-            >
-              Clear
-            </button>
-            <button
-              onClick={handleFillFlowsheet}
-              className="text-[#004d92] text-xs hover:underline self-start"
-            >
-              Fill flowsheet
-            </button>
-            <button
-              onClick={handleFillOrderQueue}
-              className="text-[#004d92] text-xs hover:underline self-start"
-            >
-              Fill orders
-            </button>
-            <button
-              onClick={handleFillProblemsList}
-              className="text-[#004d92] text-xs hover:underline self-start"
-            >
-              Fill problems
-            </button>
-            <button
-              onClick={handleFillEducationInstructions}
-              className="text-[#004d92] text-xs hover:underline self-start"
-            >
-              Fill education
-            </button>
-            <button
-              onClick={handleFillProcedureNote}
-              className="text-[#004d92] text-xs hover:underline self-start"
-            >
-              Fill procedure note
-            </button>
-            <button
-              onClick={handleFillMedRecon}
-              className="text-[#004d92] text-xs hover:underline self-start"
-            >
-              Fill med recon
-            </button>
+
+          {/* Horizontally scrollable button row */}
+          <div className="overflow-x-auto">
+            <div className="flex gap-4 mb-2 w-max">
+              <button onClick={handleGenerateData} className="text-[#004d92] text-xs hover:underline whitespace-nowrap">
+                Generate Data
+              </button>
+              <button onClick={handleClearNote} className="text-[#004d92] text-xs hover:underline whitespace-nowrap">
+                Clear
+              </button>
+              <button onClick={handleFillFlowsheet} className="text-[#004d92] text-xs hover:underline whitespace-nowrap">
+                Fill flowsheet
+              </button>
+              <button onClick={handleFillOrderQueue} className="text-[#004d92] text-xs hover:underline whitespace-nowrap">
+                Fill orders
+              </button>
+              <button onClick={handleFillProblemsList} className="text-[#004d92] text-xs hover:underline whitespace-nowrap">
+                Fill problems
+              </button>
+              <button onClick={handleFillEducationInstructions} className="text-[#004d92] text-xs hover:underline whitespace-nowrap">
+                Fill education
+              </button>
+              <button onClick={handleFillProcedureNote} className="text-[#004d92] text-xs hover:underline whitespace-nowrap">
+                Fill procedure note
+              </button>
+              <button onClick={handleFillMedRecon} className="text-[#004d92] text-xs hover:underline whitespace-nowrap">
+                Fill med recon
+              </button>
+            </div>
           </div>
         </div>
+
 
         <div className="text-sm text-black mb-4">
           Summary: <span className="text-[#666] border-b border-[#666] inline-block w-[85%] ml-1"></span>
