@@ -89,6 +89,19 @@ Attestation
     console.log(medRecon)
   }
 
+  const handleFillAll = () => {
+    handleFillFlowsheet()
+    handleFillOrderQueue()
+    handleFillProblemsList()
+    handleFillEducationInstructions()
+    handleFillMedRecon()
+    handleFillProcedureNote()
+  }
+
+
+
+
+
   const handleFillPanic = (number) => {
     console.log(panicNotes[number])
     parseClipboardContent(panicNotes[number])
@@ -607,7 +620,7 @@ I have reviewed the documentation and agree with the content as written.`;
           {/* Horizontally scrollable button row */}
           <div className="overflow-x-auto">
             <div className="flex gap-4 mb-2 w-max">
-              <button onClick={handleGenerateData} className="text-[#004d92] text-xs hover:underline whitespace-nowrap">
+              {/* <button onClick={handleGenerateData} className="text-[#004d92] text-xs hover:underline whitespace-nowrap">
                 Generate Data
               </button>
               <button onClick={handleClearNote} className="text-[#004d92] text-xs hover:underline whitespace-nowrap">
@@ -630,6 +643,9 @@ I have reviewed the documentation and agree with the content as written.`;
               </button>
               <button onClick={handleFillMedRecon} className="text-[#004d92] text-xs hover:underline whitespace-nowrap">
                 Fill med recon
+              </button> */}
+              <button onClick={handleFillAll} className="text-[#004d92] text-xs hover:underline whitespace-nowrap">
+                Fill all
               </button>
             </div>
           </div>
