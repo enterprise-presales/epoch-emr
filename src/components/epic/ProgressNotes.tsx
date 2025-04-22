@@ -98,13 +98,13 @@ Attestation
     handleFillProcedureNote()
   }
 
-
-
-
-
   const handleFillPanic = (number) => {
-    console.log(panicNotes[number])
-    parseClipboardContent(panicNotes[number])
+    const clipboard = panicNotes[number];
+    // Set individual section states
+    parseClipboardContent(clipboard);
+    // Generate updated note and set it
+    const updatedNote = parseMyNoteClipboardContent(myNoteContent, clipboard);
+    setMyNoteContent(updatedNote);
   }
 
   const parseClipboardContent = (clipboardData: string) => {
@@ -319,94 +319,323 @@ I have reviewed the documentation and agree with the content as written.`;
   };
 
   // Function to parse clipboard content for the "mynote" view
-  const parseMyNoteClipboardContent = (currentContent: string, clipboardData: string) => {
-    console.log("Parsing clipboard data for My Note view");
+  // const parseMyNoteClipboardContent = (currentContent: string, clipboardData: string) => {
+  //   console.log("Parsing clipboard data for My Note view");
     
+  //   try {
+  //     // Define section headers and their corresponding markers
+  //     const sections = [
+  //       { header: 'History of Present Illness:', marker: '[.HPISEC-EPIC#31000231848]', key: 'hpi' },
+  //       { header: 'Physical Examination:', marker: '[.PESEC-EPIC#31000231850]', key: 'pe' },
+  //       { header: 'Results:', marker: '[.RESULTSEC-EPIC#31000231851]', key: 'results' },
+  //       { header: 'Assessment & Plan:', marker: '[.APSEC-EPIC#31000231852]', key: 'assessment' },
+  //       { header: 'Attestation:', marker: '[.ATTESTSEC-EPIC#31000231857]', key: 'attestation' },
+  //       { header: 'Flowsheet:', marker: '[.ATTESTSEC-EPIC#31000231857]', key: 'flowsheet' },
+  //     ];
+      
+  //     // Extract section content from clipboard data (excluding section titles)
+  //     const extractedSections: Record<string, string> = {};
+      
+  //     // Initialize with empty strings
+  //     sections.forEach(section => {
+  //       extractedSections[section.key] = '';
+  //     });
+      
+  //     // Find the start and end indices for each section in the clipboard data
+  //     const sectionRanges: Record<string, { start: number; end: number }> = {};
+  //     const clipboardLines = clipboardData.split('\n');
+      
+  //     // Find the line index for each section header
+  //     for (let i = 0; i < clipboardLines.length; i++) {
+  //       const line = clipboardLines[i].trim();
+        
+  //       for (const section of sections) {
+  //         if (line.includes(section.header)) {
+  //           sectionRanges[section.key] = {
+  //             start: i + 1, // Start from the line after the header
+  //             end: clipboardLines.length // Default to end of clipboard data
+  //           };
+  //           break;
+  //         }
+  //       }
+  //     }
+      
+  //     // Set the end index for each section (the start of the next section)
+  //     const sectionKeys = Object.keys(sectionRanges);
+  //     sectionKeys.sort((a, b) => {
+  //       return sectionRanges[a].start - sectionRanges[b].start;
+  //     });
+      
+  //     for (let i = 0; i < sectionKeys.length; i++) {
+  //       const currentKey = sectionKeys[i];
+  //       const nextKey = sectionKeys[i + 1];
+        
+  //       if (nextKey) {
+  //         sectionRanges[currentKey].end = sectionRanges[nextKey].start - 1;
+  //       }
+  //     }
+      
+  //     // Extract content for each section, excluding the section headers
+  //     for (const key in sectionRanges) {
+  //       const { start, end } = sectionRanges[key];
+  //       const sectionLines = clipboardLines.slice(start, end);
+  //       extractedSections[key] = sectionLines.join('\n').trim();
+        
+  //       if (extractedSections[key]) {
+  //         console.log(`Extracted ${key}:`, extractedSections[key]);
+  //       }
+  //     }
+      
+  //     // Parse the current content to identify sections and markers
+  //     const contentSections: Array<{
+  //       type: 'header' | 'marker' | 'content';
+  //       sectionKey?: string;
+  //       text: string;
+  //     }> = [];
+      
+  //     const contentLines = currentContent.split('\n');
+      
+  //     for (let i = 0; i < contentLines.length; i++) {
+  //       const line = contentLines[i].trim();
+  //       if (!line) {
+  //         contentSections.push({ type: 'content', text: '' });
+  //         continue;
+  //       }
+        
+  //       let isSectionHeader = false;
+  //       let isMarker = false;
+  //       let sectionKey = '';
+        
+  //       // Check if this is a section header
+  //       for (const section of sections) {
+  //         if (line.includes(section.header.replace(':', '')) && !line.includes(section.marker)) {
+  //           isSectionHeader = true;
+  //           sectionKey = section.key;
+  //           break;
+  //         }
+  //       }
+        
+  //       // Check if this is a marker
+  //       for (const section of sections) {
+  //         if (line.includes(section.marker)) {
+  //           isMarker = true;
+  //           sectionKey = section.key;
+  //           break;
+  //         }
+  //       }
+        
+  //       if (isSectionHeader) {
+  //         contentSections.push({ type: 'header', sectionKey, text: contentLines[i] });
+  //       } else if (isMarker) {
+  //         contentSections.push({ type: 'marker', sectionKey, text: contentLines[i] });
+  //       } else {
+  //         contentSections.push({ type: 'content', text: contentLines[i] });
+  //       }
+  //     }
+      
+  //     // Build the result by combining the structure with extracted content
+  //     const result: string[] = [];
+  //     let currentSectionKey: string | null = null;
+  //     let addedContent = false;
+      
+  //     for (let i = 0; i < contentSections.length; i++) {
+  //       const section = contentSections[i];
+        
+  //       if (section.type === 'header') {
+  //         // Add a line break before the header (except for the first header)
+  //         if (currentSectionKey !== null) {
+  //           result.push('');
+  //         }
+          
+  //         // Always add the header
+  //         result.push(section.text);
+  //         currentSectionKey = section.sectionKey;
+  //         addedContent = false;
+  //       } else if (section.type === 'marker' && section.sectionKey) {
+  //         // Add the marker
+  //         result.push(section.text);
+          
+  //         // Add a single line break after the marker
+  //         result.push('');
+          
+  //         // Add the extracted content if available
+  //         if (extractedSections[section.sectionKey]) {
+  //           result.push(extractedSections[section.sectionKey]);
+  //           addedContent = true;
+  //         }
+          
+  //         // Skip any existing content until the next header or marker
+  //         let j = i + 1;
+  //         while (j < contentSections.length) {
+  //           if (contentSections[j].type === 'header' || contentSections[j].type === 'marker') {
+  //             i = j - 1; // Set i to the item before the next header/marker
+  //             break;
+  //           }
+  //           j++;
+  //         }
+          
+  //         // If we reached the end of the content
+  //         if (j >= contentSections.length) {
+  //           break;
+  //         }
+  //       } else if (section.type === 'content' && !addedContent) {
+  //         // Only add content if we haven't already added extracted content for this section
+  //         result.push(section.text);
+  //       }
+  //     }
+      
+  //     return result.join('\n');
+  //   } catch (error) {
+  //     console.error("Error parsing clipboard data for My Note view:", error);
+  //     return currentContent; // Return unchanged content on error
+  //   }
+  // };
+
+  const parseMyNoteClipboardContent = (
+    currentContent: string,
+    clipboardData: string
+  ) => {
+    console.log("Parsing clipboard data for My Note view");
+  
     try {
-      // Define section headers and their corresponding markers
+      // Define headers, markers, and their associated state setters
       const sections = [
-        { header: 'History of Present Illness:', marker: '[.HPISEC-EPIC#31000231848]', key: 'hpi' },
-        { header: 'Physical Examination:', marker: '[.PESEC-EPIC#31000231850]', key: 'pe' },
-        { header: 'Results:', marker: '[.RESULTSEC-EPIC#31000231851]', key: 'results' },
-        { header: 'Assessment & Plan:', marker: '[.APSEC-EPIC#31000231852]', key: 'assessment' },
-        { header: 'Attestation:', marker: '[.ATTESTSEC-EPIC#31000231857]', key: 'attestation' },
-        { header: 'Flowsheet:', marker: '[.ATTESTSEC-EPIC#31000231857]', key: 'flowsheet' },
+        {
+          header: 'History of Present Illness:',
+          marker: '[.HPISEC-EPIC#31000231848]',
+          key: 'hpi',
+          setter: setHistoryOfPresentIllness,
+        },
+        {
+          header: 'Physical Examination:',
+          marker: '[.PESEC-EPIC#31000231850]',
+          key: 'pe',
+          setter: setPhysicalExam,
+        },
+        {
+          header: 'Results:',
+          marker: '[.RESULTSEC-EPIC#31000231851]',
+          key: 'results',
+          setter: setResults,
+        },
+        {
+          header: 'Assessment & Plan:',
+          marker: '[.APSEC-EPIC#31000231852]',
+          key: 'assessment',
+          setter: setAssessmentPlan,
+        },
+        {
+          header: 'Attestation:',
+          marker: '[.ATTESTSEC-EPIC#31000231857]',
+          key: 'attestation',
+          setter: setAttestation,
+        },
+        {
+          header: 'Flowsheet:',
+          marker: '[.FLOWSEC-EPIC#31000231860]',
+          key: 'flowsheet',
+          setter: setFlowsheet,
+        },
+        {
+          header: 'orders_list:',
+          marker: '[.ORDERSEC-EPIC#31000231861]',
+          key: 'orders_list',
+          setter: setOrderslist,
+        },
+        {
+          header: 'problems_list:',
+          marker: '[.PROBLEMSEC-EPIC#31000231862]',
+          key: 'problems_list',
+          setter: setProblemslist,
+        },
+        {
+          header: 'education_instructions:',
+          marker: '[.EDSEC-EPIC#31000231863]',
+          key: 'education_instructions',
+          setter: setEducationInstructions,
+        },
+        {
+          header: 'procedure_note:',
+          marker: '[.PROCSEC-EPIC#31000231864]',
+          key: 'procedure_note',
+          setter: setProcedureNote,
+        },
+        {
+          header: 'med_recon:',
+          marker: '[.MEDSEC-EPIC#31000231865]',
+          key: 'med_recon',
+          setter: setMedRecon,
+        }
       ];
-      
-      // Extract section content from clipboard data (excluding section titles)
+  
       const extractedSections: Record<string, string> = {};
-      
-      // Initialize with empty strings
       sections.forEach(section => {
         extractedSections[section.key] = '';
       });
-      
-      // Find the start and end indices for each section in the clipboard data
-      const sectionRanges: Record<string, { start: number; end: number }> = {};
+  
       const clipboardLines = clipboardData.split('\n');
-      
-      // Find the line index for each section header
+      const sectionRanges: Record<string, { start: number; end: number }> = {};
+  
+      // Find where each section starts
       for (let i = 0; i < clipboardLines.length; i++) {
         const line = clipboardLines[i].trim();
-        
         for (const section of sections) {
           if (line.includes(section.header)) {
             sectionRanges[section.key] = {
-              start: i + 1, // Start from the line after the header
-              end: clipboardLines.length // Default to end of clipboard data
+              start: i + 1,
+              end: clipboardLines.length,
             };
             break;
           }
         }
       }
-      
-      // Set the end index for each section (the start of the next section)
+  
+      // Define where each section ends (start of next)
       const sectionKeys = Object.keys(sectionRanges);
-      sectionKeys.sort((a, b) => {
-        return sectionRanges[a].start - sectionRanges[b].start;
-      });
-      
+      sectionKeys.sort((a, b) => sectionRanges[a].start - sectionRanges[b].start);
+  
       for (let i = 0; i < sectionKeys.length; i++) {
         const currentKey = sectionKeys[i];
         const nextKey = sectionKeys[i + 1];
-        
         if (nextKey) {
           sectionRanges[currentKey].end = sectionRanges[nextKey].start - 1;
         }
       }
-      
-      // Extract content for each section, excluding the section headers
+  
+      // Extract section content & set state
       for (const key in sectionRanges) {
         const { start, end } = sectionRanges[key];
         const sectionLines = clipboardLines.slice(start, end);
-        extractedSections[key] = sectionLines.join('\n').trim();
-        
-        if (extractedSections[key]) {
-          console.log(`Extracted ${key}:`, extractedSections[key]);
+        const content = sectionLines.join('\n').trim();
+  
+        extractedSections[key] = content;
+  
+        const matchedSection = sections.find(s => s.key === key);
+        if (matchedSection?.setter) {
+          matchedSection.setter(content);
         }
       }
-      
-      // Parse the current content to identify sections and markers
+  
+      // Now rebuild the structured note
       const contentSections: Array<{
         type: 'header' | 'marker' | 'content';
         sectionKey?: string;
         text: string;
       }> = [];
-      
+  
       const contentLines = currentContent.split('\n');
-      
+  
       for (let i = 0; i < contentLines.length; i++) {
         const line = contentLines[i].trim();
         if (!line) {
           contentSections.push({ type: 'content', text: '' });
           continue;
         }
-        
+  
         let isSectionHeader = false;
         let isMarker = false;
         let sectionKey = '';
-        
-        // Check if this is a section header
+  
         for (const section of sections) {
           if (line.includes(section.header.replace(':', '')) && !line.includes(section.marker)) {
             isSectionHeader = true;
@@ -414,8 +643,7 @@ I have reviewed the documentation and agree with the content as written.`;
             break;
           }
         }
-        
-        // Check if this is a marker
+  
         for (const section of sections) {
           if (line.includes(section.marker)) {
             isMarker = true;
@@ -423,7 +651,7 @@ I have reviewed the documentation and agree with the content as written.`;
             break;
           }
         }
-        
+  
         if (isSectionHeader) {
           contentSections.push({ type: 'header', sectionKey, text: contentLines[i] });
         } else if (isMarker) {
@@ -432,64 +660,55 @@ I have reviewed the documentation and agree with the content as written.`;
           contentSections.push({ type: 'content', text: contentLines[i] });
         }
       }
-      
-      // Build the result by combining the structure with extracted content
+  
       const result: string[] = [];
       let currentSectionKey: string | null = null;
       let addedContent = false;
-      
+  
       for (let i = 0; i < contentSections.length; i++) {
         const section = contentSections[i];
-        
+  
         if (section.type === 'header') {
-          // Add a line break before the header (except for the first header)
           if (currentSectionKey !== null) {
             result.push('');
           }
-          
-          // Always add the header
           result.push(section.text);
-          currentSectionKey = section.sectionKey;
+          currentSectionKey = section.sectionKey ?? null;
           addedContent = false;
         } else if (section.type === 'marker' && section.sectionKey) {
-          // Add the marker
           result.push(section.text);
-          
-          // Add a single line break after the marker
           result.push('');
-          
-          // Add the extracted content if available
           if (extractedSections[section.sectionKey]) {
             result.push(extractedSections[section.sectionKey]);
             addedContent = true;
           }
-          
-          // Skip any existing content until the next header or marker
+  
+          // Skip following content lines until next header/marker
           let j = i + 1;
           while (j < contentSections.length) {
-            if (contentSections[j].type === 'header' || contentSections[j].type === 'marker') {
-              i = j - 1; // Set i to the item before the next header/marker
+            if (
+              contentSections[j].type === 'header' ||
+              contentSections[j].type === 'marker'
+            ) {
+              i = j - 1;
               break;
             }
             j++;
           }
-          
-          // If we reached the end of the content
-          if (j >= contentSections.length) {
-            break;
-          }
+  
+          if (j >= contentSections.length) break;
         } else if (section.type === 'content' && !addedContent) {
-          // Only add content if we haven't already added extracted content for this section
           result.push(section.text);
         }
       }
-      
+  
       return result.join('\n');
     } catch (error) {
       console.error("Error parsing clipboard data for My Note view:", error);
-      return currentContent; // Return unchanged content on error
+      return currentContent;
     }
   };
+  
 
   const handleSyncToEMR = async () => {
     try {
@@ -746,6 +965,24 @@ Assessment & Plan
 Attestation
 💎 [.ATTESTSEC-EPIC#31000231857]"
             />
+            <div className="pt-4 pb-4">
+              <input
+                type="number"
+                min="1"
+                max="10"
+                value={panicScenario}
+                onChange={(e) => setPanicScenario(e.target.value)}
+                placeholder="Enter scenario (1-10)"
+                className="border border-gray-300 px-2 py-1 mr-2 rounded"
+              />
+              <button
+                className="py-2 px-4 bg-green-100 rounded"
+                onClick={() => handleFillPanic(Number(panicScenario))}
+                disabled={Number(panicScenario) < 1 || Number(panicScenario) > 10}
+              >
+                OK
+              </button>
+            </div>
           </div>
         )}
       </div>
