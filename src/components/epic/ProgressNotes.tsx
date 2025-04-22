@@ -1,6 +1,6 @@
 import { Check, X, Bold, Italic, AlignLeft, Plus, Share2, Lock, Edit3, AlertTriangle, Mail, FileText } from "lucide-react";
 import { ResizablePanel } from "@/components/ui/resizable";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useFlowsheet } from "@/AutoFillContexts";
 import panicNotes from "../../utils/panicNotes"
 
@@ -89,7 +89,10 @@ Attestation
     console.log(medRecon)
   }
 
+  const handleFillAllRef = useRef(() => {});
+
   const handleFillAll = () => {
+    console.log("REEEEEEEEEEEE")
     handleFillFlowsheet()
     handleFillOrderQueue()
     handleFillProblemsList()
@@ -97,6 +100,23 @@ Attestation
     handleFillMedRecon()
     handleFillProcedureNote()
   }
+
+  handleFillAllRef.current = handleFillAll;
+
+
+
+useEffect(() => {
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if ((e.key === "`" && e.shiftKey) || e.key === "~") {
+      console.log("Keyboard triggered fill all");
+      handleFillAllRef.current(); // ✅ always latest version
+    }
+  };
+
+  window.addEventListener("keydown", handleKeyDown);
+  return () => window.removeEventListener("keydown", handleKeyDown);
+}, []);
+
 
   const handleFillPanic = (number) => {
     const clipboard = panicNotes[number];
