@@ -158,7 +158,7 @@ const ExamSection = () => {
         </div>
 
         <div className="bg-[#e6eaee] text-[#00426c] rounded-md p-1 font-bold flex items-center justify-between" style={{ border: '1px solid #00426c', borderStyle: 'inset', marginTop: '0px', marginLeft: '0px', marginBottom: '8px', textAlign: 'left' }}>
-          <div>02/18/25 visit with Dr. Michael Commons - For Return Visit / Follow Up</div>
+          <div>04/23/25 - Dr. Commure - SFDPH Scenarios</div>
           <div className="flex items-center">
             <select
               value={examType}

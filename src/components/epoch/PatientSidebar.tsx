@@ -5,9 +5,9 @@ const PatientSidebar = () => {
         <div className="flex items-center gap-4">
           <div className="epoch-patient-avatar">TT</div>
           <div>
-            <div className="font-semibold">TestPatient, Test</div>
-            <div className="text-sm opacity-90">Male • 82 y.o.</div>
-            <div className="text-sm opacity-90">DOB: 1/1/1943</div>
+            <div className="font-semibold">SFDPH Scribe</div>
+            <div className="text-sm opacity-90">Demo | 04.22.2025</div>
+            <div className="text-sm opacity-90">DOB: 04/15/1850</div>
           </div>
         </div>
 
