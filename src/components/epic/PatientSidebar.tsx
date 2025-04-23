@@ -5,16 +5,16 @@ const PatientSidebar = () => {
         <div className="flex items-center gap-4">
           <div className="epic-patient-avatar">TT</div>
           <div>
-            <div className="font-semibold">TestPatient, Test</div>
-            <div className="text-sm opacity-90">Male • 82 y.o.</div>
-            <div className="text-sm opacity-90">DOB: 1/1/1943</div>
+            <div className="font-semibold">SFDPH Scribe</div>
+            <div className="text-sm opacity-90">Demo | 04.22.2025</div>
+            <div className="text-sm opacity-90">DOB: 04/15/1850</div>
           </div>
         </div>
 
         <div className="space-y-3">
           <div className="flex items-center gap-2">
             <Globe className="h-4 w-4" />
-            <span className="text-sm">Interpreter: Not needed</span>
+            <span className="text-sm">Interpreter: Sometimes</span>
           </div>
 
           <div className="flex items-center gap-2">
@@ -30,7 +30,7 @@ const PatientSidebar = () => {
             <div className="text-sm font-semibold mb-1">Providers Attending</div>
             <div className="flex items-center gap-2">
               <Stethoscope className="h-4 w-4" />
-              <span className="text-sm">Dr. David Commons</span>
+              <span className="text-sm">Dr. Marcus Commure</span>
             </div>
           </div>
 

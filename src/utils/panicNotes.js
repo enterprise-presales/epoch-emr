@@ -301,7 +301,7 @@ procedure_note:
 Pre-Op Diagnosis: Dry Eye Syndrome (H04.123, Bilateral)
 Post-Op Diagnosis: Same
 Procedure: Insertion of punctal plugs, bilateral lower puncta
-Performing Physician: [Ophthalmologist's name]
+Performing Physician: Dr. Commure
 Procedure performed: After obtaining informed consent, topical anesthetic drops were administered to both eyes. The lower punctal areas were cleaned and prepped. Under microscopic visualization, punctal plugs were inserted into the lower puncta of both eyes. The plugs were confirmed to be well-positioned. The patient tolerated the procedure well with no immediate complications.`,
     4: `History of Present Illness:
 Patient presents for evaluation of a changing mole on the right arm, facial redness, and dry, itchy patches on elbows. The mole on the right arm has gotten darker and bigger over the last three months. It was light brown before and is now much darker with uneven coloring. The patient noticed the changes while applying sunscreen. No itching, pain, bleeding, or ulceration of the mole is reported.
@@ -610,7 +610,7 @@ Post-Op Diagnosis: Benign Paroxysmal Positional Vertigo (BPPV)
 
 Procedure: Dix-Hallpike Test and Epley Maneuver
 
-Performing Physician: Dr. Martinez
+Performing Physician: Dr. Commure
 
 Procedure performed:
 1. Dix-Hallpike Test: The patient was seated on the examination table and then quickly laid back with the head hanging about 20 degrees below horizontal and turned 45 degrees to the right. The eyes were observed for nystagmus. The maneuver was then repeated with the head turned 45 degrees to the left. Characteristic nystagmus was observed, confirming the diagnosis of BPPV.
@@ -631,86 +631,157 @@ med_recon:
 
 Patient reports sometimes forgetting the evening dose of metformin. No other adherence issues or side effects reported. Patient initially confused atorvastatin (Lipitor) with Lipidil, but this was clarified during the visit.`,
     7: `History of Present Illness:
-Patient presents to the Emergency Room with chest pressure that started approximately two hours ago while sitting and watching TV. The pressure is located in the center of the chest and is described as feeling heavy, "like something's sitting on me." The pain radiates to the left arm and jaw. Patient rates the pain as 8/10 currently, noting it was initially 8-9/10 when it started and has not significantly improved. Associated symptoms include shortness of breath, sweating, and nausea without vomiting. The patient denies palpitations, dizziness, or lightheadedness. The onset was sudden and not associated with exertion. The patient took two sublingual nitroglycerin tablets borrowed from a friend prior to ambulance arrival, which provided minimal relief.
 
-- Medical History: Hypertension, hyperlipidemia, Type 2 diabetes, previous RCA stent placement 5 years ago, appendectomy as a child
+Previous Visit Summary:
+On April 15, 2025, patient presented with complaints of intermittent, mild chest discomfort occurring over 2 weeks. Discomfort was described as left-sided chest pressure, non-radiating, lasting 1-2 minutes, primarily with exertion. Pain resolved with rest. Patient reported a metallic taste coinciding with chest discomfort episodes.
+
+HPI:
+Emergen Paulson, a 55-year-old male with a history of CAD s/p RCA stent 5 years ago, presents to the Emergency Department with acute onset of chest pain. The pain started approximately two hours ago while the patient was sitting and watching TV. He describes the pain as a central chest pressure, rating it initially as 8-9/10, currently at 8/10. The pain radiates to his left arm and jaw. Associated symptoms include shortness of breath, sweating, and nausea without vomiting. The patient denies palpitations, dizziness, or lightheadedness. He took two sublingual nitroglycerin tablets borrowed from a friend, which provided minimal relief.
+
+- Medical History: Hypertension, hyperlipidemia, Type 2 diabetes, CAD s/p RCA stent (5 years ago)
+- Surgical History: Appendectomy in childhood
 - Allergies: Penicillin (rash)
 - Medications: 
-  - Lisinopril (for hypertension)
-  - Metformin (for diabetes)
-  - Atorvastatin (for hyperlipidemia)
+  - Lisinopril
+  - Metformin
+  - Atorvastatin
   - Aspirin 81mg daily
   - Clopidogrel (Plavix)
-- Family History: Father had a heart attack at age 55, mother has hypertension and diabetes
-- Social History: Current smoker (1 pack per day for 30 years), occasional alcohol use (beer), no illicit drug use
+- Social History: Current smoker (1 pack/day for 30 years), occasional alcohol use
+- Family History: Father had MI at age 55, mother has hypertension and diabetes
 
 Physical Examination:
-- General: Alert and oriented, appears uncomfortable
-- Cardiovascular: Regular heart sounds, no murmurs noted
-- Respiratory: Lungs clear to auscultation bilaterally
-- Musculoskeletal: Normal strength in both hands
-- Neurological: No numbness or tingling reported besides left arm pain
+
+- General: Alert and oriented
+- Cardiovascular: Regular rate and rhythm, no murmurs
+- Respiratory: Lungs clear to auscultation
+- Neurological: No focal deficits, equal strength bilaterally
+- Extremities: No edema noted
 
 Results:
+
 - EKG: Pending
-- Troponin: Pending
-- CBC: Pending
-- Basic Metabolic Panel: Pending
-- Coagulation Studies: Pending
-- Lipid Panel: Pending
 - Chest X-ray: Pending
+- Laboratory tests: Pending (Troponin, CBC, Chem-10, Coags, Lipid panel)
 
 Assessment & Plan:
-Visit Diagnoses:
-1. Acute chest pain, suspicious for acute coronary syndrome (R07.2)
-2. History of coronary artery disease with previous stent placement (I25.10)
-3. Essential hypertension (I10)
-4. Type 2 diabetes mellitus (E11.9)
-5. Hyperlipidemia (E78.5)
-6. Nicotine dependence (F17.200)
 
-Treatment Plan:
-- Immediate chewable aspirin 324mg PO x1 (STAT)
-- Continuous cardiac monitoring
-- Oxygen therapy as needed to maintain SpO2 > 94%
-- IV access established
-- Nitroglycerin 0.4mg SL q5min PRN chest pain, if SBP > 100 mmHg (STAT)
-- Morphine 2-4mg IV q2-4h PRN severe chest pain (STAT)
-- EKG (STAT)
-- Troponin level (STAT)
-- CBC, BMP, coagulation studies, lipid panel (STAT)
-- Chest X-ray (STAT)
-- Cardiology consultation (STAT)
-- Prepare for possible emergent cardiac catheterization pending initial test results
+Visit Diagnoses:
+1. Acute Coronary Syndrome, suspected (ICD-10: I24.9)
+2. Coronary Artery Disease (ICD-10: I25.10)
+3. Essential Hypertension (ICD-10: I10)
+4. Type 2 Diabetes Mellitus (ICD-10: E11.9)
+5. Hyperlipidemia (ICD-10: E78.5)
+6. Nicotine Dependence (ICD-10: F17.200)
 
 Procedure Note:
-No procedures performed during this initial evaluation.
+No procedures performed at this time.
+
+Treatment Plan:
+- Medications:
+  - Aspirin 325mg PO chewed STAT
+  - Nitroglycerin 0.4mg SL q5min PRN chest pain
+  - Consider morphine for pain relief if needed
+
+- Imaging:
+  - Chest X-ray STAT
+  - Consider CT Coronary Angiogram if initial workup inconclusive
+
+- Labs:
+  - Troponin STAT, repeat in 3 hours
+  - CBC, Chem-10, Coags, Lipid panel STAT
+
+- Other:
+  - Continuous cardiac monitoring
+  - Oxygen therapy as needed to maintain O2 sat > 94%
+  - Cardiology consult STAT for possible urgent cardiac catheterization
+  - Serial EKGs q15-30 minutes or with any change in symptoms
 
 Attestation:
+
 I have reviewed the documentation and agree with the content as written.
 
 orders_list:
 {
   "orders": [
-    "Aspirin 324mg",
-    "Nitroglycerin 0.4mg",
-    "Morphine 2-4mg"
+    "Aspirin 325mg",
+    "Nitroglycerin 0.4mg"
   ]
 }
 
 education_instructions:
-Patient educated on the possibility of acute coronary syndrome and the need for urgent evaluation and treatment. Explained the importance of immediate testing, including EKG and blood work. Advised to report any changes in symptoms immediately. Discussed the potential need for cardiac catheterization based on initial results. Emphasized the importance of smoking cessation and provided brief counseling on its impact on heart health.
+
+Mr. Paulson, you have been admitted to the hospital for evaluation of possible heart-related chest pain. We are conducting several tests to determine the cause of your symptoms. Please follow these instructions:
+
+1. Remain in bed and use the call button if you need assistance.
+2. Report any changes in your chest pain, shortness of breath, or other new symptoms immediately.
+3. Do not eat or drink anything until further notice, as you may need additional tests or procedures.
+4. We will be monitoring your heart continuously. Please do not remove any of the monitoring equipment.
+5. Your family may visit, but we ask that you limit visitors to allow for rest and frequent examinations.
+6. We strongly advise against smoking. If you feel nicotine cravings, please inform the nursing staff.
+7. Once discharged, it will be crucial to follow up with your cardiologist and primary care physician as instructed.
+8. Consider enrolling in a smoking cessation program to improve your overall heart health.
 
 med_recon:
-- Lisinopril (dosage not specified) - taken daily for hypertension
-- Metformin (dosage not specified) - taken daily for diabetes
-- Atorvastatin (dosage not specified) - taken daily for hyperlipidemia
-- Aspirin 81mg - taken daily
-- Clopidogrel (Plavix, dosage not specified) - taken daily
 
-Patient reports good adherence to medication regimen and confirms taking all medications this morning.`,
-    8: ``,
-    9: ``,
+1. Lisinopril 20mg oral daily
+2. Metformin 1000mg oral twice daily
+3. Atorvastatin 40mg oral daily
+4. Aspirin 81mg oral daily
+5. Clopidogrel (Plavix) 75mg oral daily
+
+Patient reports taking all medications as prescribed, including the morning of admission.`,
+    8: `
+History of Present Illness:
+Cantonese-speaking patient presenting for follow-up of depression. She reports feeling unhappy and unmotivated for the past 3 months. The onset of symptoms coincided with job loss 3 months ago, and she recently went through a divorce, causing significant stress. She describes persistent sadness, loss of interest, poor sleep, decreased appetite, fatigue, and difficulty concentrating. The patient sometimes feels worthless and has passive thoughts of not wanting to live but denies any specific plan for self-harm. This is her first episode of depression, and she has not received any prior treatments. Her medical history includes hypothyroidism and hypertension, for which she is currently taking medications. The patient lives alone, is currently unemployed, and receives support from friends and church.
+Physical Examination:
+General: Alert and oriented to time, person, place. Patient appears cooperative but with slowed movements. Mood observed as low with congruent affect.
+Results:
+Assessment & Plan:
+1. Major Depressive Disorder
+   - Start sertraline 50 mg daily, increase to 100 mg after one week
+   - Refer for psychotherapy
+   - Recommend 30 minutes of exercise 5 days per week
+   - Advise on improving sleep habits
+   - Encourage patient to call friends or 988 during difficult moments
+   - Follow-up appointment in 2 weeks
+   - Instruct patient to contact if symptoms worsen
+2. Hypothyroidism
+   - Continue current medication regimen
+3. Hypertension
+   - Continue current medication regimen
+Attestation:
+I have reviewed the documentation and agree with the content as written.
+education_instructions:
+開始服用Sertraline，每日50毫克，一週後增至100毫克。轉介心理治療。建議每週5日進行30分鐘運動，改善睡眠習慣。如遇困難時刻，請聯絡朋友或撥打988。兩週後複診。如症狀惡化，請立即聯絡醫生。請繼續服用甲狀腺和高血壓藥物。`,
+    9: `History of Present Illness:
+Patient is seeking help for depression. She reports feeling unhappy and unmotivated for the past three months, coinciding with job loss and a recent divorce. The patient describes feeling sad most of the time and has lost interest in previously enjoyable activities, including hobbies and socializing. She reports sleep disturbances, with only a few hours of sleep per night, decreased appetite, constant exhaustion, and difficulty concentrating. The patient acknowledges feelings of worthlessness and occasional thoughts of not wanting to be alive, but denies specific plans or intentions to harm herself. This is her first experience with depression of this severity, and she has no prior history of mental health treatment. The patient has a history of hypothyroidism and hypertension, both currently managed with medication. She lives alone, is unemployed, and reports feeling isolated. She mentions having support from close friends and a church community.
+Physical Examination:
+General: Alert and oriented to time, person, place. Patient's voice noted to be low, and she appears sad. Mood depressed, affect congruent. Judgment and insight intact.
+Results:
+Assessment & Plan:
+1. Major Depressive Disorder
+   - Start sertraline 50 mg daily, increase to 100 mg after one week if well-tolerated
+   - Refer to therapist for counseling
+   - Recommend exercise for 30 minutes, 5 days a week (e.g., walking)
+   - Advise on improving sleep hygiene, including consistent bedtime routine
+   - Provided crisis hotline number (988) for emergency support
+   - Follow-up appointment in 2 weeks to assess response to treatment
+2. Hypothyroidism and Hypertension
+   - Continue current medications as prescribed
+   - Monitor for any interactions with new antidepressant medication
+3. Unemployment and Social Isolation
+   - Encourage continued engagement with church community and friends for support
+Attestation:
+I have reviewed the documentation and agree with the content as written.
+education_instructions:
+- Take sertraline 50 mg daily for one week, then increase to 100 mg daily if tolerated well
+- Engage in 30 minutes of exercise (such as walking) 5 days a week
+- Establish a consistent bedtime routine to improve sleep
+- Reach out to friends or call the crisis hotline at 988 if feeling overwhelmed or experiencing increased thoughts of not wanting to live
+- Attend follow-up appointment in 2 weeks to assess response to treatment
+- Continue medications for hypothyroidism and hypertension as previously prescribed
+- Contact the office if symptoms worsen or if there are concerns about the new medication`,
     10: ``
 }
 
