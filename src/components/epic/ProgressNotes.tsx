@@ -551,7 +551,7 @@ I have reviewed the documentation and agree with the content as written.`;
           setter: setAttestation,
         },
         {
-          header: 'Flowsheet:',
+          header: 'flowsheet:',
           marker: '[.FLOWSEC-EPIC#31000231860]',
           key: 'flowsheet',
           setter: setFlowsheet,
@@ -748,6 +748,7 @@ I have reviewed the documentation and agree with the content as written.`;
         } else if (activeView === "mynote") {
           // For mynote view, update only the variable fields
           const updatedContent = parseMyNoteClipboardContent(myNoteContent, myNoteSample);
+
           setMyNoteContent(updatedContent);
         }
         return;
