@@ -83,8 +83,8 @@ const PatientSidebar = () => {
           </div>
 
           <div className="border-t border-opacity-20 border-[#b2e2ff] pt-2">
-            <div className="text-sm font-semibold mb-1 text-[#bb64be]">OPHTHALMOLOGY PROBLEM LIST:</div>
-            <div className="text-sm mb-2">Other problems (3)</div>
+            <div className="text-sm font-semibold mb-1 text-[#bb64be]">PROBLEM LIST:</div>
+            <div className="text-sm mb-2"></div>
           </div>
 
           <div className="border-t border-opacity-20 border-[#b2e2ff] pt-2">
