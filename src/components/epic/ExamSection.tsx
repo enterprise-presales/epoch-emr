@@ -67,10 +67,6 @@ const ExamSection = () => {
       rows: ["playsNearOtherChildren", "learningToShare"]
     },
     {
-      title: "immunizations",
-      rows: ["immunizationsGivenToday"]
-    },
-    {
       title: "vision",
       rows: [
         "visionScreening"
