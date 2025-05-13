@@ -55,10 +55,21 @@ export const ScenarioProvider = ({ children }: { children: ReactNode }) => {
   const [currentScenario, setCurrentScenario] = useState<Scenario | null>(null);
   const [isScenarioActive, setIsScenarioActive] = useState<boolean>(false);
 
-  // Load scenarios from JSON file
+  // Load scenarios from Netlify Function or fallback to JSON file
   useEffect(() => {
     const loadScenarios = async () => {
       try {
+        // First try to load from the Netlify Function
+        const functionResponse = await fetch('/.netlify/functions/scenarios');
+        if (functionResponse.ok) {
+          const data = await functionResponse.json();
+          console.log('Loaded scenarios from Netlify Function');
+          setScenarios(data.scenarios || []);
+          return;
+        }
+        
+        // Fallback to the static file
+        console.log('Netlify Function failed, falling back to static file');
         const response = await fetch('/scenarios.json');
         if (!response.ok) {
           console.error('Failed to load scenarios:', response.status);
@@ -81,20 +92,43 @@ export const ScenarioProvider = ({ children }: { children: ReactNode }) => {
     // If scenarios haven't been loaded yet, try to load them
     if (scenarios.length === 0) {
       try {
-        console.log('No scenarios loaded yet, fetching from scenarios.json');
-        const response = await fetch('/scenarios.json');
-        if (!response.ok) {
-          console.error('Failed to load scenarios:', response.status);
-          return false;
+        console.log('No scenarios loaded yet, fetching from server');
+        
+        // First try to load from the Netlify Function
+        let data;
+        try {
+          const functionResponse = await fetch('/.netlify/functions/scenarios');
+          if (functionResponse.ok) {
+            data = await functionResponse.json();
+            console.log('Loaded scenarios from Netlify Function');
+          } else {
+            // Fallback to the static file
+            console.log('Netlify Function failed, falling back to static file');
+            const response = await fetch('/scenarios.json');
+            if (!response.ok) {
+              console.error('Failed to load scenarios:', response.status);
+              return false;
+            }
+            data = await response.json();
+          }
+        } catch (fetchError) {
+          console.error('Error fetching scenarios:', fetchError);
+          // Fallback to the static file
+          console.log('Fetch error, falling back to static file');
+          const response = await fetch('/scenarios.json');
+          if (!response.ok) {
+            console.error('Failed to load scenarios:', response.status);
+            return false;
+          }
+          data = await response.json();
         }
-        const data = await response.json();
         
         if (!data.scenarios || !Array.isArray(data.scenarios)) {
           console.error('Invalid scenarios data format:', data);
           return false;
         }
         
-        console.log(`Loaded ${data.scenarios.length} scenarios from file`);
+        console.log(`Loaded ${data.scenarios.length} scenarios from server`);
         setScenarios(data.scenarios);
         
         // Find the requested scenario in the newly loaded scenarios
