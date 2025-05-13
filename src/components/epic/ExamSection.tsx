@@ -129,7 +129,7 @@ const ExamSection = ({ examType, setExamType }: ExamSectionProps) => {
             <div className="bg-[#FFDA63] rounded p-0.5">
               <LayoutGrid className="h-3 w-3 text-[#C68600]" />
             </div>
-            <span className="text-xs font-medium text-white">Zeiss Forum</span>
+            <span className="text-xs font-medium text-white">Previous Note</span>
           </button>
           
           <button className="flex items-center gap-1.5 px-2 py-1 bg-[#005791] hover:bg-[#0068a8]" style={{ borderTop: '2px solid #F06292' }}>
