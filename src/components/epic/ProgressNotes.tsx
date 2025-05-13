@@ -2,9 +2,11 @@ import { Check, X, Bold, Italic, AlignLeft, Plus, Share2, Lock, Edit3, AlertTria
 import { ResizablePanel } from "@/components/ui/resizable";
 import { useState, useEffect, useRef } from "react";
 import { useFlowsheet } from "@/AutoFillContexts";
+import { useScenario } from "@/ScenarioContext";
 import panicNotes from "../../utils/panicNotes"
 
 const ProgressNotes = () => {
+  const { currentScenario, isScenarioActive } = useScenario();
   // State for the sectioned view
   const [historyOfPresentIllness, setHistoryOfPresentIllness] = useState("");
   const [physicalExam, setPhysicalExam] = useState("");
@@ -17,6 +19,8 @@ const ProgressNotes = () => {
   const [educationInstructions, setEducationInstructions] = useState("")
   const [procedureNote, setProcedureNote] = useState("")
   const [medRecon, setMedRecon] = useState("")
+  // Ref to store scenario data without updating the UI
+  const scenarioDataRef = useRef<any>(null);
   const { setFlowsheet: setFlowsheetContext } = useFlowsheet();
   const { setOrdersList: setOrdersListContext } = useFlowsheet();
   const { setProblemsList: setProblemsListContext } = useFlowsheet();
@@ -117,6 +121,18 @@ useEffect(() => {
   window.addEventListener("keydown", handleKeyDown);
   return () => window.removeEventListener("keydown", handleKeyDown);
 }, []);
+
+// Store scenario data in ref when a scenario is active
+useEffect(() => {
+  if (isScenarioActive && currentScenario) {
+    console.log("Loading scenario data:", currentScenario.name);
+    
+    // Store the clinical data in the ref without updating the UI
+    scenarioDataRef.current = currentScenario.clinicalData;
+    
+    console.log("Scenario data loaded. Click 'Sync to EMR' to load and sync data.");
+  }
+}, [isScenarioActive, currentScenario]);
 
 
   const handleFillPanic = (number) => {
@@ -558,63 +574,191 @@ I have reviewed the documentation and agree with the content as written.`;
   };
   
 
-  const handleSyncToEMR = async () => {
+  const handleSyncToEMR = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
-      console.log("Sync to EMR button clicked");
+      // Determine if click was on left or right side of button
+      const buttonWidth = e.currentTarget.offsetWidth;
+      const clickX = e.nativeEvent.offsetX;
+      const isLeftSide = clickX < buttonWidth / 2;
       
-      // Check if clipboard API is available
-      if (!navigator.clipboard) {
-        console.error("Clipboard API not available");
+      console.log(`Sync to EMR button clicked on ${isLeftSide ? 'left' : 'right'} side`);
+      
+      if (isLeftSide) {
+        // LEFT SIDE: Sync from clipboard
+        console.log("Using clipboard data");
         
-        if (activeView === "sectioned") {
-          // For sectioned view, parse the sample note
-          console.log("Using sample note due to clipboard API unavailability");
-          parseClipboardContent(sampleNote);
-        } else if (activeView === "template") {
-          // For template view, set the template content directly
-          setTemplateContent(sampleNote);
-        } else if (activeView === "mynote") {
-          // For mynote view, update only the variable fields
-          const updatedContent = parseMyNoteClipboardContent(myNoteContent, myNoteSample);
+        // Check if clipboard API is available
+        if (!navigator.clipboard) {
+          console.error("Clipboard API not available");
+          
+          if (activeView === "sectioned") {
+            // For sectioned view, parse the sample note
+            console.log("Using sample note due to clipboard API unavailability");
+            parseClipboardContent(sampleNote);
+          } else if (activeView === "template") {
+            // For template view, set the template content directly
+            setTemplateContent(sampleNote);
+          } else if (activeView === "mynote") {
+            // For mynote view, update only the variable fields
+            const updatedContent = parseMyNoteClipboardContent(myNoteContent, myNoteSample);
+            setMyNoteContent(updatedContent);
+          }
+          return;
+        }
+        
+        // standard flow
+        try {
+          // Read from clipboard
+          console.log("Attempting to read from clipboard...");
+          const clipboardText = await navigator.clipboard.readText();
+          console.log("Clipboard content retrieved");
+          
+          if (activeView === "sectioned") {
+            // For sectioned view, parse the clipboard content
+            parseClipboardContent(clipboardText);
+            console.log(orderslist)
+          } else if (activeView === "template") {
+            // For template view, set the template content directly
+            setTemplateContent(clipboardText);
+          } else if (activeView === "mynote") {
+            // For mynote view, update only the variable fields
+            const updatedContent = parseMyNoteClipboardContent(myNoteContent, clipboardText);
+            setMyNoteContent(updatedContent);
+          }
+        } catch (clipboardError) {
+          console.error("Error accessing clipboard:", clipboardError);
+          
+          if (activeView === "sectioned") {
+            // For sectioned view, parse the sample note
+            console.log("Using sample note as fallback");
+            parseClipboardContent(sampleNote);
+          } else if (activeView === "template") {
+            // For template view, set the template content directly
+            setTemplateContent(sampleNote);
+          } else if (activeView === "mynote") {
+            // For mynote view, update only the variable fields
+            const updatedContent = parseMyNoteClipboardContent(myNoteContent, myNoteSample);
+            setMyNoteContent(updatedContent);
+          }
+        }
+      } else {
+        // RIGHT SIDE: Sync from scenario data
+        // If we have scenario data stored in the ref, use it
+        if (scenarioDataRef.current) {
+          console.log("Using stored scenario data");
+          const clinicalData = scenarioDataRef.current;
+          
+          // Create a formatted note from the clinical data
+          const formattedNote = `History of Present Illness:
+${clinicalData.historyOfPresentIllness || ""}
 
-          setMyNoteContent(updatedContent);
-        }
-        return;
-      }
-      
-      // standard flow
-      try {
-        // Read from clipboard
-        console.log("Attempting to read from clipboard...");
-        const clipboardText = await navigator.clipboard.readText();
-        console.log("Clipboard content retrieved");
-        
-        if (activeView === "sectioned") {
-          // For sectioned view, parse the clipboard content
-          parseClipboardContent(clipboardText);
-          console.log(orderslist)
-        } else if (activeView === "template") {
-          // For template view, set the template content directly
-          setTemplateContent(clipboardText);
-        } else if (activeView === "mynote") {
-          // For mynote view, update only the variable fields
-          const updatedContent = parseMyNoteClipboardContent(myNoteContent, clipboardText);
-          setMyNoteContent(updatedContent);
-        }
-      } catch (clipboardError) {
-        console.error("Error accessing clipboard:", clipboardError);
-        
-        if (activeView === "sectioned") {
-          // For sectioned view, parse the sample note
-          console.log("Using sample note as fallback");
-          parseClipboardContent(sampleNote);
-        } else if (activeView === "template") {
-          // For template view, set the template content directly
-          setTemplateContent(sampleNote);
-        } else if (activeView === "mynote") {
-          // For mynote view, update only the variable fields
-          const updatedContent = parseMyNoteClipboardContent(myNoteContent, myNoteSample);
-          setMyNoteContent(updatedContent);
+Physical Examination:
+${clinicalData.physicalExamination || ""}
+
+Results:
+${clinicalData.results || ""}
+
+Assessment & Plan:
+${clinicalData.assessmentPlan || ""}
+
+Attestation:
+${clinicalData.attestation || ""}`;
+          
+          if (activeView === "sectioned") {
+            // For sectioned view, set individual section states
+            setHistoryOfPresentIllness(clinicalData.historyOfPresentIllness || "");
+            setPhysicalExam(clinicalData.physicalExamination || "");
+            setResults(clinicalData.results || "");
+            setAssessmentPlan(clinicalData.assessmentPlan || "");
+            setAttestation(clinicalData.attestation || "");
+            
+            // Set JSON data if available
+            if (clinicalData.flowsheet) {
+              console.log("Setting flowsheet data from scenario");
+              setFlowsheet(JSON.stringify(clinicalData.flowsheet));
+            }
+            
+            if (clinicalData.orders_list) {
+              console.log("Setting orders list data from scenario");
+              setOrderslist(JSON.stringify(clinicalData.orders_list));
+            }
+            
+            if (clinicalData.problems_list) {
+              console.log("Setting problems list data from scenario");
+              setProblemslist(JSON.stringify(clinicalData.problems_list));
+            }
+            
+            if (clinicalData.education_instructions) {
+              console.log("Setting education instructions from scenario");
+              setEducationInstructions(clinicalData.education_instructions);
+            }
+            
+            if (clinicalData.procedure_note) {
+              console.log("Setting procedure note from scenario");
+              setProcedureNote(clinicalData.procedure_note);
+            }
+            
+            if (clinicalData.med_recon) {
+              console.log("Setting medication reconciliation from scenario");
+              setMedRecon(clinicalData.med_recon);
+            }
+          } else if (activeView === "template") {
+            // For template view, set the template content directly
+            setTemplateContent(formattedNote);
+          } else if (activeView === "mynote") {
+            // For mynote view, update the variable fields
+            const updatedContent = parseMyNoteClipboardContent(myNoteContent, formattedNote);
+            setMyNoteContent(updatedContent);
+          }
+          
+          // Sync all data to the EMR
+          console.log("Syncing all data to EMR");
+          handleFillAll();
+        } else {
+          console.log("No scenario data available, falling back to clipboard");
+          // Fall back to clipboard method if no scenario data
+          // This is the same code as the left side
+          if (!navigator.clipboard) {
+            console.error("Clipboard API not available");
+            
+            if (activeView === "sectioned") {
+              console.log("Using sample note due to clipboard API unavailability");
+              parseClipboardContent(sampleNote);
+            } else if (activeView === "template") {
+              setTemplateContent(sampleNote);
+            } else if (activeView === "mynote") {
+              const updatedContent = parseMyNoteClipboardContent(myNoteContent, myNoteSample);
+              setMyNoteContent(updatedContent);
+            }
+            return;
+          }
+          
+          try {
+            console.log("Attempting to read from clipboard...");
+            const clipboardText = await navigator.clipboard.readText();
+            console.log("Clipboard content retrieved");
+            
+            if (activeView === "sectioned") {
+              parseClipboardContent(clipboardText);
+            } else if (activeView === "template") {
+              setTemplateContent(clipboardText);
+            } else if (activeView === "mynote") {
+              const updatedContent = parseMyNoteClipboardContent(myNoteContent, clipboardText);
+              setMyNoteContent(updatedContent);
+            }
+          } catch (clipboardError) {
+            console.error("Error accessing clipboard:", clipboardError);
+            
+            if (activeView === "sectioned") {
+              console.log("Using sample note as fallback");
+              parseClipboardContent(sampleNote);
+            } else if (activeView === "template") {
+              setTemplateContent(sampleNote);
+            } else if (activeView === "mynote") {
+              const updatedContent = parseMyNoteClipboardContent(myNoteContent, myNoteSample);
+              setMyNoteContent(updatedContent);
+            }
+          }
         }
       }
     } catch (error) {
@@ -681,7 +825,10 @@ I have reviewed the documentation and agree with the content as written.`;
         </div>
 
         <div className="flex flex-col space-y-2 mb-4">
-          <button onClick={handleSyncToEMR} className="bg-[#004d92] text-white px-4 py-2 rounded">
+          <button
+            onClick={handleSyncToEMR}
+            className="bg-[#004d92] text-white px-4 py-2 rounded"
+          >
             Sync to EMR
           </button>
 
