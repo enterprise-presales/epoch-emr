@@ -7,26 +7,29 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Auth from "./Auth";
 import { FlowsheetProvider } from "./AutoFillContexts";
+import { ScenarioProvider } from "./ScenarioContext";
 
 const queryClient = new QueryClient();
 
 const App = () => {
   return (
-    <FlowsheetProvider>
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
-    </QueryClientProvider>
-    </FlowsheetProvider>
+    <ScenarioProvider>
+      <FlowsheetProvider>
+        <QueryClientProvider client={queryClient}>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </TooltipProvider>
+        </QueryClientProvider>
+      </FlowsheetProvider>
+    </ScenarioProvider>
   );
 };
 
