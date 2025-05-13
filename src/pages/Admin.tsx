@@ -5,6 +5,8 @@ const Admin = () => {
   const [scenariosJson, setScenariosJson] = useState("");
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [showPasswordPrompt, setShowPasswordPrompt] = useState(false);
+  const [password, setPassword] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -42,8 +44,23 @@ const Admin = () => {
     }
   };
 
+  const handleSaveClick = () => {
+    // Show password prompt
+    setShowPasswordPrompt(true);
+  };
+
   const handleSave = () => {
     try {
+      const adminPassword = import.meta.env.VITE_ADMIN_PASSWORD;
+      
+      // Check if password is correct
+      if (password !== adminPassword) {
+        setMessage("Incorrect password. Changes not saved.");
+        setShowPasswordPrompt(false);
+        setPassword("");
+        return;
+      }
+      
       // Validate JSON
       const parsedJson = JSON.parse(scenariosJson);
       
@@ -59,8 +76,14 @@ const Admin = () => {
       // Save to localStorage
       localStorage.setItem("custom-scenarios", JSON.stringify(parsedJson));
       setMessage("Scenarios saved to localStorage successfully!");
+      
+      // Reset password and close prompt
+      setShowPasswordPrompt(false);
+      setPassword("");
     } catch (error) {
       setMessage(`Error saving scenarios: ${error.message}`);
+      setShowPasswordPrompt(false);
+      setPassword("");
     }
   };
 
@@ -184,7 +207,7 @@ const Admin = () => {
           
           <div className="flex gap-4 mt-4">
             <button
-              onClick={handleSave}
+              onClick={handleSaveClick}
               className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
             >
               Save Changes
@@ -196,6 +219,43 @@ const Admin = () => {
               Reset to Default
             </button>
           </div>
+          
+          {/* Password Prompt Dialog */}
+          {showPasswordPrompt && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+                <h3 className="text-lg font-semibold mb-4">Enter Admin Password</h3>
+                <p className="text-sm text-gray-600 mb-4">
+                  Please enter the admin password to save changes.
+                </p>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full border border-gray-300 rounded px-3 py-2 mb-4"
+                  placeholder="Password"
+                  autoFocus
+                />
+                <div className="flex justify-end gap-2">
+                  <button
+                    onClick={() => {
+                      setShowPasswordPrompt(false);
+                      setPassword("");
+                    }}
+                    className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-100"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleSave}
+                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                  >
+                    Confirm
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </>
       )}
     </div>
