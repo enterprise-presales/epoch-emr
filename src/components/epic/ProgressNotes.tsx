@@ -859,9 +859,7 @@ ${clinicalData.attestation || ""}`;
               <button onClick={handleFillMedRecon} className="text-[#004d92] text-xs hover:underline whitespace-nowrap">
                 Fill med recon
               </button> */}
-              <button onClick={handleFillAll} className="text-[#004d92] text-xs hover:underline whitespace-nowrap">
-                Fill all
-              </button>
+              {/* Removed Fill all button */}
             </div>
           </div>
         </div>
