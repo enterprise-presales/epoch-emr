@@ -711,9 +711,12 @@ ${clinicalData.attestation || ""}`;
             setMyNoteContent(updatedContent);
           }
           
-          // Sync all data to the EMR
+          // Sync all data to the EMR with a slight delay to ensure state updates have been processed
           console.log("Syncing all data to EMR");
-          handleFillAll();
+          // Use setTimeout to ensure state updates have been processed
+          setTimeout(() => {
+            handleFillAll();
+          }, 100);
         } else {
           console.log("No scenario data available, falling back to clipboard");
           // Fall back to clipboard method if no scenario data
