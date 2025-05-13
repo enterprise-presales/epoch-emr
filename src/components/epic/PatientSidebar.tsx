@@ -1,20 +1,49 @@
 import { Globe, Circle, Users, CreditCard, TestTube2, Eye, Calendar, Plus, ChevronDown, Stethoscope } from "lucide-react";
+import { useScenario } from "@/ScenarioContext";
+
 const PatientSidebar = () => {
+  const { currentScenario, isScenarioActive } = useScenario();
+  
+  // Default values if no scenario is active
+  // Access patient data from currentScenario.patientData
+  const patientData = currentScenario?.patientData;
+  
+  const patientName = isScenarioActive && patientData ? patientData.patientName : "SFDPH Scribe";
+  const visitDate = isScenarioActive && patientData ? patientData.visitDate : "Demo | 04.22.2025";
+  const patientDOB = isScenarioActive && patientData ? `DOB: ${patientData.patientDOB}` : "DOB: 04/15/1850";
+  const interpreterNeeded = isScenarioActive && patientData ? patientData.interpreterNeeded : "Sometimes";
+  const providerName = isScenarioActive && patientData ? patientData.providerName : "Dr. Marcus Commure";
+  const insurance = isScenarioActive && patientData ? patientData.insurance : "Medicare";
+  const preferredLab = isScenarioActive && patientData ? patientData.preferredLab : "Quest Diagnostics";
+  const previousExam = isScenarioActive && patientData ? patientData.previousExam : "3 months ago";
+  const nextVisit = isScenarioActive && patientData ? patientData.nextVisit : "6/27/2025";
+  
+  // Get patient initials for avatar
+  const getInitials = (name: string) => {
+    const parts = name.split(',');
+    if (parts.length > 1) {
+      return parts[0].charAt(0) + (parts[1].trim().charAt(0) || '');
+    }
+    return name.substring(0, 2).toUpperCase();
+  };
+  
+  const patientInitials = getInitials(patientName);
+  
   return <div className="h-full w-64 bg-[#003861] text-[#b2e2ff] border-r border-[--epic-border] flex flex-col">
       <div className="flex-1 p-4 space-y-4">
         <div className="flex items-center gap-4">
-          <div className="epic-patient-avatar">TT</div>
+          <div className="epic-patient-avatar">{patientInitials}</div>
           <div>
-            <div className="font-semibold">SFDPH Scribe</div>
-            <div className="text-sm opacity-90">Demo | 04.22.2025</div>
-            <div className="text-sm opacity-90">DOB: 04/15/1850</div>
+            <div className="font-semibold">{patientName}</div>
+            <div className="text-sm opacity-90">{visitDate}</div>
+            <div className="text-sm opacity-90">{patientDOB}</div>
           </div>
         </div>
 
         <div className="space-y-3">
           <div className="flex items-center gap-2">
             <Globe className="h-4 w-4" />
-            <span className="text-sm">Interpreter: Sometimes</span>
+            <span className="text-sm">Interpreter: {interpreterNeeded}</span>
           </div>
 
           <div className="flex items-center gap-2">
@@ -30,7 +59,7 @@ const PatientSidebar = () => {
             <div className="text-sm font-semibold mb-1">Providers Attending</div>
             <div className="flex items-center gap-2">
               <Stethoscope className="h-4 w-4" />
-              <span className="text-sm">Dr. Marcus Commure</span>
+              <span className="text-sm">{providerName}</span>
             </div>
           </div>
 
@@ -44,7 +73,7 @@ const PatientSidebar = () => {
             <div className="text-sm font-semibold mb-1">Primary Coverage:</div>
             <div className="flex items-center gap-2">
               <CreditCard className="h-4 w-4" />
-              <span className="text-sm">Medicare</span>
+              <span className="text-sm">{insurance}</span>
             </div>
           </div>
 
@@ -52,7 +81,7 @@ const PatientSidebar = () => {
             <div className="text-sm font-semibold mb-1">PREFERRED LAB:</div>
             <div className="flex items-center gap-2">
               <TestTube2 className="h-4 w-4" />
-              <span className="text-sm">Quest Diagnostics</span>
+              <span className="text-sm">{preferredLab}</span>
             </div>
           </div>
 
@@ -60,7 +89,7 @@ const PatientSidebar = () => {
             <div className="text-sm font-semibold mb-1">PREVOUS EXAMS:</div>
             <div className="flex items-center gap-2">
               <Eye className="h-4 w-4" />
-              <span className="text-sm">Last: 3 months ago</span>
+              <span className="text-sm">Last: {previousExam}</span>
             </div>
           </div>
 
@@ -68,7 +97,7 @@ const PatientSidebar = () => {
             <div className="text-sm font-semibold mb-1">NEXT VISIT:</div>
             <div className="flex items-center gap-2">
               <Calendar className="h-4 w-4" />
-              <span className="text-sm">6/27/2025</span>
+              <span className="text-sm">{nextVisit}</span>
             </div>
           </div>
 
