@@ -55,21 +55,25 @@ export const ScenarioProvider = ({ children }: { children: ReactNode }) => {
   const [currentScenario, setCurrentScenario] = useState<Scenario | null>(null);
   const [isScenarioActive, setIsScenarioActive] = useState<boolean>(false);
 
-  // Load scenarios from Netlify Function or fallback to JSON file
+  // Load scenarios from localStorage or fallback to JSON file
   useEffect(() => {
     const loadScenarios = async () => {
       try {
-        // First try to load from the Netlify Function
-        const functionResponse = await fetch('/.netlify/functions/scenarios');
-        if (functionResponse.ok) {
-          const data = await functionResponse.json();
-          console.log('Loaded scenarios from Netlify Function');
-          setScenarios(data.scenarios || []);
-          return;
+        // First check if we have custom scenarios in localStorage
+        const customScenarios = localStorage.getItem('custom-scenarios');
+        if (customScenarios) {
+          try {
+            const data = JSON.parse(customScenarios);
+            console.log('Loaded scenarios from localStorage');
+            setScenarios(data.scenarios || []);
+            return;
+          } catch (parseError) {
+            console.error('Error parsing localStorage scenarios:', parseError);
+          }
         }
         
         // Fallback to the static file
-        console.log('Netlify Function failed, falling back to static file');
+        console.log('No localStorage scenarios, loading from file');
         const response = await fetch('/scenarios.json');
         if (!response.ok) {
           console.error('Failed to load scenarios:', response.status);
@@ -92,18 +96,19 @@ export const ScenarioProvider = ({ children }: { children: ReactNode }) => {
     // If scenarios haven't been loaded yet, try to load them
     if (scenarios.length === 0) {
       try {
-        console.log('No scenarios loaded yet, fetching from server');
+        console.log('No scenarios loaded yet, fetching scenarios');
         
-        // First try to load from the Netlify Function
+        // First check if we have custom scenarios in localStorage
         let data;
-        try {
-          const functionResponse = await fetch('/.netlify/functions/scenarios');
-          if (functionResponse.ok) {
-            data = await functionResponse.json();
-            console.log('Loaded scenarios from Netlify Function');
-          } else {
+        const customScenarios = localStorage.getItem('custom-scenarios');
+        
+        if (customScenarios) {
+          try {
+            data = JSON.parse(customScenarios);
+            console.log('Loaded scenarios from localStorage');
+          } catch (parseError) {
+            console.error('Error parsing localStorage scenarios:', parseError);
             // Fallback to the static file
-            console.log('Netlify Function failed, falling back to static file');
             const response = await fetch('/scenarios.json');
             if (!response.ok) {
               console.error('Failed to load scenarios:', response.status);
@@ -111,10 +116,9 @@ export const ScenarioProvider = ({ children }: { children: ReactNode }) => {
             }
             data = await response.json();
           }
-        } catch (fetchError) {
-          console.error('Error fetching scenarios:', fetchError);
-          // Fallback to the static file
-          console.log('Fetch error, falling back to static file');
+        } else {
+          // No localStorage scenarios, load from file
+          console.log('No localStorage scenarios, loading from file');
           const response = await fetch('/scenarios.json');
           if (!response.ok) {
             console.error('Failed to load scenarios:', response.status);
@@ -128,7 +132,7 @@ export const ScenarioProvider = ({ children }: { children: ReactNode }) => {
           return false;
         }
         
-        console.log(`Loaded ${data.scenarios.length} scenarios from server`);
+        console.log(`Loaded ${data.scenarios.length} scenarios`);
         setScenarios(data.scenarios);
         
         // Find the requested scenario in the newly loaded scenarios

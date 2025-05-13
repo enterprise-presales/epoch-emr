@@ -1,117 +1,113 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 
 const Admin = () => {
   const [scenariosJson, setScenariosJson] = useState("");
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [isSaving, setIsSaving] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    // Load scenarios from the Netlify Function
-    const loadScenarios = async () => {
+    // Check if we have scenarios in localStorage first
+    const localScenarios = localStorage.getItem("custom-scenarios");
+    
+    if (localScenarios) {
       try {
-        const response = await fetch('/.netlify/functions/scenarios');
-        if (!response.ok) {
-          throw new Error(`Failed to load scenarios: ${response.status}`);
-        }
-        const data = await response.text();
-        setScenariosJson(data);
-        setMessage("Loaded scenarios from server");
+        const parsedScenarios = JSON.parse(localScenarios);
+        setScenariosJson(JSON.stringify(parsedScenarios, null, 2));
+        setMessage("Loaded custom scenarios from localStorage");
       } catch (error) {
-        console.error('Error loading scenarios:', error);
-        
-        // Fallback to loading from the static file if the function fails
-        try {
-          const staticResponse = await fetch('/scenarios.json');
-          if (staticResponse.ok) {
-            const staticData = await staticResponse.text();
-            setScenariosJson(staticData);
-            setMessage("Loaded scenarios from static file (function failed)");
-          } else {
-            setMessage(`Error loading scenarios: ${error.message}`);
-          }
-        } catch (staticError) {
-          setMessage(`Error loading scenarios: ${error.message}, static fallback also failed: ${staticError.message}`);
-        }
-      } finally {
-        setIsLoading(false);
+        console.error("Error parsing localStorage scenarios:", error);
+        loadDefaultScenarios();
       }
-    };
-
-    loadScenarios();
+    } else {
+      loadDefaultScenarios();
+    }
+    
+    setIsLoading(false);
   }, []);
 
-  const handleSave = async () => {
+  const loadDefaultScenarios = async () => {
+    try {
+      const response = await fetch('/scenarios.json');
+      if (!response.ok) {
+        throw new Error(`Failed to load scenarios: ${response.status}`);
+      }
+      const data = await response.json();
+      setScenariosJson(JSON.stringify(data, null, 2));
+      setMessage("Loaded default scenarios");
+    } catch (error) {
+      console.error('Error loading scenarios:', error);
+      setMessage(`Error loading scenarios: ${error.message}`);
+    }
+  };
+
+  const handleSave = () => {
     try {
       // Validate JSON
-      JSON.parse(scenariosJson);
+      const parsedJson = JSON.parse(scenariosJson);
       
-      setIsSaving(true);
-      setMessage("Saving scenarios...");
-      
-      // Save using the Netlify Function
-      const response = await fetch('/.netlify/functions/scenarios', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ content: scenariosJson }),
-      });
-      
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Failed to save scenarios: ${response.status} - ${errorText}`);
-      }
-      
-      setMessage("Scenarios saved successfully to the server!");
+      // Save to localStorage
+      localStorage.setItem("custom-scenarios", JSON.stringify(parsedJson));
+      setMessage("Scenarios saved to localStorage successfully!");
     } catch (error) {
       setMessage(`Error saving scenarios: ${error.message}`);
-    } finally {
-      setIsSaving(false);
     }
   };
 
   const handleReset = async () => {
     try {
-      setIsLoading(true);
-      setMessage("Resetting scenarios...");
+      // Remove from localStorage
+      localStorage.removeItem("custom-scenarios");
       
-      // Reset using the Netlify Function
-      const response = await fetch('/.netlify/functions/scenarios', {
-        method: 'DELETE',
-      });
-      
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Failed to reset scenarios: ${response.status} - ${errorText}`);
-      }
-      
-      // Load the reset scenarios
-      const getResponse = await fetch('/.netlify/functions/scenarios');
-      if (!getResponse.ok) {
-        throw new Error(`Failed to load reset scenarios: ${getResponse.status}`);
-      }
-      
-      const data = await getResponse.text();
-      setScenariosJson(data);
-      setMessage("Reset to original scenarios successfully!");
+      // Load default scenarios
+      await loadDefaultScenarios();
+      setMessage("Reset to default scenarios successfully!");
     } catch (error) {
       setMessage(`Error resetting scenarios: ${error.message}`);
-      
-      // Fallback to loading from the static file if the function fails
+    }
+  };
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
       try {
-        const staticResponse = await fetch('/scenarios.json');
-        if (staticResponse.ok) {
-          const staticData = await staticResponse.text();
-          setScenariosJson(staticData);
-          setMessage("Reset using static file (function failed)");
-        }
-      } catch (staticError) {
-        // Already showing the main error, no need to update message
+        const content = e.target?.result as string;
+        // Validate JSON
+        const parsedJson = JSON.parse(content);
+        
+        // Format and set the content
+        setScenariosJson(JSON.stringify(parsedJson, null, 2));
+        setMessage("File loaded successfully. Click 'Save Changes' to apply.");
+      } catch (error) {
+        setMessage(`Error parsing JSON file: ${error.message}`);
       }
-    } finally {
-      setIsLoading(false);
+    };
+    reader.onerror = () => {
+      setMessage("Error reading file");
+    };
+    reader.readAsText(file);
+  };
+
+  const handleDownload = () => {
+    try {
+      // Create a blob from the JSON
+      const blob = new Blob([scenariosJson], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      
+      // Create a link and click it to download
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'scenarios.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      setMessage(`Error downloading file: ${error.message}`);
     }
   };
 
@@ -132,11 +128,33 @@ const Admin = () => {
       
       <div className="mb-4">
         <p className="text-gray-600 mb-2">
-          Edit the scenarios JSON below. Changes will be saved to the server and will persist until you reset them.
+          Edit the scenarios JSON below or upload a new JSON file. Changes will be saved to your browser's localStorage.
         </p>
         <p className="text-gray-600 mb-4">
-          <strong>Note:</strong> This is for demo purposes only. The changes are saved using Netlify Functions.
+          <strong>Note:</strong> This is for demo purposes only. In a real application, you would save changes to a database.
         </p>
+      </div>
+      
+      <div className="flex gap-4 mb-4">
+        <input
+          type="file"
+          accept=".json"
+          onChange={handleFileUpload}
+          ref={fileInputRef}
+          className="hidden"
+        />
+        <button
+          onClick={() => fileInputRef.current?.click()}
+          className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+        >
+          Upload JSON
+        </button>
+        <button
+          onClick={handleDownload}
+          className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+        >
+          Download JSON
+        </button>
       </div>
       
       {isLoading ? (
@@ -153,17 +171,15 @@ const Admin = () => {
           <div className="flex gap-4 mt-4">
             <button
               onClick={handleSave}
-              disabled={isSaving}
-              className={`${isSaving ? 'bg-blue-300' : 'bg-blue-500 hover:bg-blue-600'} text-white px-6 py-2 rounded`}
+              className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
             >
-              {isSaving ? 'Saving...' : 'Save Changes'}
+              Save Changes
             </button>
             <button
               onClick={handleReset}
-              disabled={isLoading}
-              className={`${isLoading ? 'bg-red-300' : 'bg-red-500 hover:bg-red-600'} text-white px-6 py-2 rounded`}
+              className="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600"
             >
-              {isLoading ? 'Resetting...' : 'Reset to Original'}
+              Reset to Default
             </button>
           </div>
         </>
