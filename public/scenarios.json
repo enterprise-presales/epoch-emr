@@ -1,0 +1,116 @@
+{
+  "scenarios": [
+    {
+      "id": "pediatric-well-visit",
+      "name": "Pediatric Well Visit",
+      "examType": "Clinic Visit",
+      "patientData": {
+        "patientName": "Johnson, Emily",
+        "patientDOB": "02/15/2023",
+        "visitDate": "04.23.2025",
+        "providerName": "Dr. Sarah Miller",
+        "interpreterNeeded": "No",
+        "insurance": "Blue Cross",
+        "preferredLab": "LabCorp",
+        "previousExam": "6 months ago",
+        "nextVisit": "10/23/2025"
+      },
+      "clinicalData": {
+        "historyOfPresentIllness": "Reason for Visit: Routine 26-month well-child visit. No specific concerns reported.\n\nHealth History: Mother had preeclampsia during pregnancy. Patient had jaundice after birth, treated with phototherapy for five days. Recent cold with cough and runny nose, now resolved. History of ear infection at 10 months.\n\nPhysical Development History: Running, climbing, and going up and down stairs while holding on. Good appetite, eats a variety of foods including fruits, yogurt, and pasta. Vegetables are challenging.\n\nMental Development History: Says many words, combines two to three words. Follows two-step instructions. Plays near other children, learning to share.\n\nPrenatal, Birth, and Neonatal History: Born three weeks early due to maternal preeclampsia. Jaundice after birth requiring phototherapy for five days.\n\nReview of Systems: No acute symptoms reported.",
+        "physicalExamination": "Temperature 98.6°F, Heart rate 100 bpm, Respiratory rate 24, Blood pressure 95/55 mmHg\nVision screening normal\nEars: Normal appearance\nLungs: Clear\nTeeth: No visible cavities\nOverall physical exam appropriate for age",
+        "results": "No laboratory tests indicated or performed during this visit.",
+        "assessmentPlan": "Assessment / Impression: Healthy 26-month-old male with appropriate development. Up-to-date on immunizations after today's visit.\n\nPlan:\n1. Administered second Hepatitis A vaccine and annual flu vaccine\n2. Continue varied diet, encourage vegetable intake\n3. Maintain regular physical activity and limit screen time\n4. Schedule first dental visit with pediatric dentist (referral provided)\n5. Continue reading together and engaging in activities to support language development\n6. Monitor for any signs of asthma or allergies given family history\n7. Return for next well-child visit at 30 months or sooner if concerns arise",
+        "attestation": "I have reviewed the documentation and agree with the content as written.",
+        "flowsheet": {
+          "patientAgeMonths": 26,
+          "vitals": {
+            "temperatureF": 98.6,
+            "heartRateBpm": 100,
+            "respiratoryRate": 24,
+            "bloodPressure": "95/55"
+          },
+          "physicalDevelopment": {
+            "running": "yes",
+            "climbing": "yes",
+            "appetite": "good"
+          },
+          "languageDevelopment": {
+            "saysMultipleWords": "yes",
+            "combinesTwoToThreeWords": "yes",
+            "followsTwoStepInstructions": "yes"
+          },
+          "socialDevelopment": {
+            "playsNearOtherChildren": "yes",
+            "learningToShare": "yes"
+          },
+          "immunizationsGivenToday": [
+            "Hepatitis A",
+            "Influenza"
+          ],
+          "visionScreening": "Normal",
+          "oralHealth": {
+            "brushingFrequency": "twice daily",
+            "visibleCavities": "no"
+          },
+          "familyHistory": {
+            "asthma": "father",
+            "seasonalAllergies": "father",
+            "diabetes": "family history",
+            "cancer": "na"
+          }
+        },
+        "orders_list": {
+          "orders": [
+            "Hepatitis A vaccine",
+            "Influenza vaccine"
+          ]
+        },
+        "education_instructions": "Continue with current feeding practices, emphasizing variety. Brush teeth twice daily with small amount of fluoride toothpaste. Maintain safety measures at home and during outdoor activities. Continue supporting language development through reading and conversation."
+      }
+    },
+    {
+      "id": "eye-examination",
+      "name": "Comprehensive Eye Examination",
+      "examType": "Eye Exam",
+      "patientData": {
+        "patientName": "Smith, Robert",
+        "patientDOB": "05/12/1955",
+        "visitDate": "04.23.2025",
+        "providerName": "Dr. Marcus Commure",
+        "interpreterNeeded": "No",
+        "insurance": "Medicare",
+        "preferredLab": "Quest Diagnostics",
+        "previousExam": "1 year ago",
+        "nextVisit": "10/23/2025"
+      },
+      "clinicalData": {
+        "historyOfPresentIllness": "Patient presents with complaints of hazy vision, especially at a distance, for the past three months. The right eye is more affected than the left. Symptoms are most noticeable in the evening and after computer use at work. Patient rates severity as 6 out of 10, affecting daily life. Associated symptoms include mild headaches and eye strain after focusing. Patient also reports dry and burning eyes with a sensation of something in them. Artificial tears provide temporary relief.\n\nPatient is an accountant with extensive computer use. Last eye exam was two years ago with a slight prescription change. Patient has been nearsighted since childhood.\n\nPast Medical History: High blood pressure since 2018, high cholesterol since 2019, Type 2 diabetes since 2015. Last A1c was 6.7% in January.\n\nFamily History: Maternal grandmother had glaucoma, father has macular degeneration. Both parents have Type 2 diabetes.",
+        "physicalExamination": "Visual Acuity:\nWithout correction: OD 20/100, OS 20/80\nWith correction: OD 20/40, OS 20/30\nNear vision with correction: OD J3, OS J2\n\nPupils: Equal and reactive, no APD\nExtraocular Movements: Full\nConfrontation Visual Fields: Full to finger counting OU\n\nIntraocular Pressure: OD 16 mmHg, OS 15 mmHg\n\nSlit-Lamp Examination:\nLids: Normal, mild meibomian gland dysfunction\nConjunctiva/Sclera: Small pinguecula nasally OU\nCornea: Clear OU\nAnterior Chamber: Deep and quiet OU\nIris: Normal OU\nLens: OD 2+ nuclear sclerotic and 1+ posterior subcapsular cataracts, OS 1+ nuclear sclerosis\n\nTear Film Evaluation:\nTear break-up time: OD 4 seconds, OS 5 seconds\nSchirmer test: OD 5mm, OS 6mm after 5 minutes\nPunctate epithelial erosions inferiorly OU",
+        "results": "Tear break-up time: OD 4 seconds, OS 5 seconds (reduced, normal >10 seconds)\nSchirmer test: OD 5mm, OS 6mm after 5 minutes (reduced, normal >10mm)",
+        "assessmentPlan": "1. Dry Eye Syndrome (H04.123, Bilateral)\n   - Punctal plugs inserted in lower puncta OU\n   - Continue preservative-free artificial tears, reduce to twice daily or as needed\n   - Warm compresses with gentle massage daily for meibomian gland dysfunction\n   - Follow-up in 6 weeks to check plugs\n   - Patient educated on punctal plugs, potential side effects, and proper eye care\n\n2. Cataracts (H25.13 Right eye, H25.11 Left eye)\n   - Monitor progression\n   - Continue good diabetes management\n   - Patient educated on cataract development and potential future need for surgery\n\n3. Refractive Error (H52.10 Myopia, Bilateral)\n   - New progressive glasses prescription to be provided\n   - Patient educated on the 20-20-20 rule for computer use: every 20 minutes, look at something 20 feet away for 20 seconds\n\n4. Type 2 Diabetes Mellitus (E11.9)\n   - Continue current management with Metformin\n   - Emphasize importance of glycemic control for eye health\n   - Annual comprehensive dilated eye exam recommended",
+        "attestation": "I have reviewed the documentation and agree with the content as written.",
+        "eyeExam": {
+          "checkedConditions": ["Edema", "Dystrophy"],
+          "slitLamp": {
+            "ll": {"right": "Normal", "left": "Normal"},
+            "cs": {"right": "White and quiet", "left": "White and quiet"},
+            "cornea": {"right": "Edema, Corneal dystrophy", "left": "Edema, Corneal dystrophy"},
+            "ac": {"right": "Deep and quiet", "left": "Deep and quiet"},
+            "iris": {"right": "Round and reactive", "left": "Round and reactive"},
+            "lens": {"right": "+2 Nuclear sclerosis", "left": "+1 Nuclear sclerosis"},
+            "vitreous": {"right": "Normal", "left": "Normal"}
+          },
+          "fundus": {
+            "disc": {"right": "Normal", "left": "Normal"},
+            "cdRatio": {"right": "0.3", "left": "0.3"},
+            "macula": {"right": "Normal", "left": "Normal"},
+            "vessels": {"right": "Normal", "left": "Normal"},
+            "periph": {"right": "Normal", "left": "Normal"}
+          }
+        },
+        "education_instructions": "- Use preservative-free artificial tears twice daily or as needed\n- Perform warm compresses with gentle massage daily for meibomian gland dysfunction\n- Follow the 20-20-20 rule for computer use: every 20 minutes, look at something 20 feet away for 20 seconds\n- Avoid rubbing eyes vigorously\n- Call the office if a punctal plug falls out\n- Continue managing diabetes well\n- Return in 6 weeks to check punctal plugs\n- Schedule comprehensive eye exam in 12 months or sooner if vision changes occur",
+        "procedure_note": "Pre-Op Diagnosis: Dry Eye Syndrome (H04.123, Bilateral)\nPost-Op Diagnosis: Same\nProcedure: Insertion of punctal plugs, bilateral lower puncta\nPerforming Physician: Dr. Commure\nProcedure performed: After obtaining informed consent, topical anesthetic drops were administered to both eyes. The lower punctal areas were cleaned and prepped. Under microscopic visualization, punctal plugs were inserted into the lower puncta of both eyes. The plugs were confirmed to be well-positioned. The patient tolerated the procedure well with no immediate complications."
+      }
+    }
+  ]
+}
