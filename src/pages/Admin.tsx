@@ -47,6 +47,15 @@ const Admin = () => {
       // Validate JSON
       const parsedJson = JSON.parse(scenariosJson);
       
+      // Additional validation to ensure it has the expected structure
+      if (!parsedJson.scenarios || !Array.isArray(parsedJson.scenarios)) {
+        throw new Error("Invalid JSON structure: missing 'scenarios' array");
+      }
+      
+      // Format the JSON properly before saving
+      const formattedJson = JSON.stringify(parsedJson, null, 2);
+      setScenariosJson(formattedJson);
+      
       // Save to localStorage
       localStorage.setItem("custom-scenarios", JSON.stringify(parsedJson));
       setMessage("Scenarios saved to localStorage successfully!");
@@ -78,6 +87,11 @@ const Admin = () => {
         const content = e.target?.result as string;
         // Validate JSON
         const parsedJson = JSON.parse(content);
+        
+        // Additional validation to ensure it has the expected structure
+        if (!parsedJson.scenarios || !Array.isArray(parsedJson.scenarios)) {
+          throw new Error("Invalid JSON structure: missing 'scenarios' array");
+        }
         
         // Format and set the content
         setScenariosJson(JSON.stringify(parsedJson, null, 2));
