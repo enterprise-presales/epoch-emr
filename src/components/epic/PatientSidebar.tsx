@@ -8,7 +8,7 @@ const PatientSidebar = () => {
   // Access patient data from currentScenario.patientData
   const patientData = currentScenario?.patientData;
   
-  const patientName = isScenarioActive && patientData ? patientData.patientName : "SFDPH Scribe";
+  const patientName = isScenarioActive && patientData ? patientData.patientName : "Test, Patient";
   const visitDate = isScenarioActive && patientData ? patientData.visitDate : "Demo | 04.22.2025";
   const patientDOB = isScenarioActive && patientData ? `DOB: ${patientData.patientDOB}` : "DOB: 04/15/1850";
   const interpreterNeeded = isScenarioActive && patientData ? patientData.interpreterNeeded : "Sometimes";
