@@ -9,7 +9,12 @@ import ProcedureNote from "../ui/procedurenote";
 
 
 
-const ExamSection = () => {
+interface ExamSectionProps {
+  examType: string;
+  setExamType: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const ExamSection = ({ examType, setExamType }: ExamSectionProps) => {
 
   const { flowsheet: flowsheetContext } = useFlowsheet();
   let parsedFlowsheet: Record<string, any> = {};
@@ -104,7 +109,6 @@ const ExamSection = () => {
   
   
 
-  const [examType, setExamType] = useState<string>("Clinic Visit");
   const [checkedConditions, setCheckedConditions] = useState<string[]>([]);
 
   const handleCheckboxChange = useCallback((conditionName: string) => {
@@ -158,7 +162,7 @@ const ExamSection = () => {
         </div>
 
         <div className="bg-[#e6eaee] text-[#00426c] rounded-md p-1 font-bold flex items-center justify-between" style={{ border: '1px solid #00426c', borderStyle: 'inset', marginTop: '0px', marginLeft: '0px', marginBottom: '8px', textAlign: 'left' }}>
-          <div>04/23/25 - Dr. Commure - SFDPH Scenarios</div>
+          <div>{new Date().toLocaleDateString('en-US', {month: '2-digit', day: '2-digit', year: '2-digit'})} - Dr. Commure - Demo Scenario</div>
           <div className="flex items-center">
             <select
               value={examType}
