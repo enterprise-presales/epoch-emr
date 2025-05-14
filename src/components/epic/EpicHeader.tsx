@@ -20,18 +20,32 @@ import {
   Store
 } from "lucide-react";
 
+import { useScenario } from "@/ScenarioContext";
+
 const EpicHeader = ({ openScribe }: { openScribe: () => void }) => {
+  const { currentScenario, isScenarioActive } = useScenario();
+  
+  // Default provider name if no scenario is active
+  const providerName = isScenarioActive && currentScenario
+    ? currentScenario.patientData.providerName.toUpperCase().replace(/^DR\.\s+/i, '')
+    : "DAVID COMMONS";
+  
+  // Default patient name for the tab
+  const patientName = isScenarioActive && currentScenario
+    ? currentScenario.patientData.patientName
+    : "TestPatient, Test";
+  
   return (
     <header className="bg-gradient-to-b from-[#1a3c5e] to-[#002244]">
       {/* Top row */}
       <div className="flex items-center gap-2 px-0 py-1 bg-[#003366] text-white">
-        <img 
-          src="/lovable-uploads/f93e6fe5-b95c-469a-b5a9-5e8190139ac4.png" 
+        <img
+          src="/lovable-uploads/f93e6fe5-b95c-469a-b5a9-5e8190139ac4.png"
           alt="Epoch"
           className="h-9"
         />
         <span className="text-xs font-medium mr-1">Application Server uppcpusrapp108 - FDE</span>
-        <span className="text-xs font-medium">MED PRACTICE PPMC - DAVID COMMONS</span>
+        <span className="text-xs font-medium">MED PRACTICE PPMC - {providerName}</span>
         
         <div className="flex items-center ml-auto gap-4">
           <div className="flex items-center">
@@ -152,7 +166,7 @@ const EpicHeader = ({ openScribe }: { openScribe: () => void }) => {
           <Calendar className="h-3 w-3" />
         </button>
         <div className="ml-2 flex items-center bg-[#003366] rounded-t-md px-3 py-1">
-          <span className="mr-2">TestPatient, Test</span>
+          <span className="mr-2">{patientName}</span>
           <X className="h-3 w-3 hover:text-gray-300 cursor-pointer" />
         </div>
       </div>

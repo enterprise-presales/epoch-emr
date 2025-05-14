@@ -55,102 +55,76 @@ export const ScenarioProvider = ({ children }: { children: ReactNode }) => {
   const [currentScenario, setCurrentScenario] = useState<Scenario | null>(null);
   const [isScenarioActive, setIsScenarioActive] = useState<boolean>(false);
 
-  // Load scenarios from localStorage or fallback to JSON file
+  // Function to load scenarios from localStorage or fallback to JSON file
+  const loadScenarios = async () => {
+    try {
+      // First check if we have custom scenarios in localStorage
+      const customScenarios = localStorage.getItem('custom-scenarios');
+      if (customScenarios) {
+        try {
+          const data = JSON.parse(customScenarios);
+          console.log('Loaded scenarios from localStorage');
+          setScenarios(data.scenarios || []);
+          return data.scenarios || [];
+        } catch (parseError) {
+          console.error('Error parsing localStorage scenarios:', parseError);
+        }
+      }
+      
+      // Fallback to the static file
+      console.log('No localStorage scenarios, loading from file');
+      const response = await fetch('/scenarios.json');
+      if (!response.ok) {
+        console.error('Failed to load scenarios:', response.status);
+        return [];
+      }
+      const data = await response.json();
+      setScenarios(data.scenarios || []);
+      return data.scenarios || [];
+    } catch (error) {
+      console.error('Error loading scenarios:', error);
+      return [];
+    }
+  };
+
+  // Load scenarios on initial mount
   useEffect(() => {
-    const loadScenarios = async () => {
-      try {
-        // First check if we have custom scenarios in localStorage
-        const customScenarios = localStorage.getItem('custom-scenarios');
-        if (customScenarios) {
-          try {
-            const data = JSON.parse(customScenarios);
-            console.log('Loaded scenarios from localStorage');
-            setScenarios(data.scenarios || []);
-            return;
-          } catch (parseError) {
-            console.error('Error parsing localStorage scenarios:', parseError);
+    loadScenarios();
+  }, []);
+
+  // Add a storage event listener to reload scenarios when localStorage changes
+  useEffect(() => {
+    const handleStorageChange = (event: StorageEvent) => {
+      if (event.key === 'custom-scenarios') {
+        console.log('Detected localStorage change, reloading scenarios');
+        loadScenarios().then(newScenarios => {
+          // If we have a current scenario, refresh it with the latest data
+          if (currentScenario) {
+            const updatedScenario = newScenarios.find(s => s.id === currentScenario.id);
+            if (updatedScenario) {
+              console.log(`Refreshing current scenario: ${updatedScenario.name}`);
+              setCurrentScenario(updatedScenario);
+            }
           }
-        }
-        
-        // Fallback to the static file
-        console.log('No localStorage scenarios, loading from file');
-        const response = await fetch('/scenarios.json');
-        if (!response.ok) {
-          console.error('Failed to load scenarios:', response.status);
-          return;
-        }
-        const data = await response.json();
-        setScenarios(data.scenarios || []);
-      } catch (error) {
-        console.error('Error loading scenarios:', error);
+        });
       }
     };
 
-    loadScenarios();
-  }, []);
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, [currentScenario]);
 
   // Function to load a specific scenario by ID
   const loadScenario = async (scenarioId: string): Promise<boolean> => {
     console.log(`Attempting to load scenario with ID: ${scenarioId}`);
     
-    // If scenarios haven't been loaded yet, try to load them
-    if (scenarios.length === 0) {
-      try {
-        console.log('No scenarios loaded yet, fetching scenarios');
-        
-        // First check if we have custom scenarios in localStorage
-        let data;
-        const customScenarios = localStorage.getItem('custom-scenarios');
-        
-        if (customScenarios) {
-          try {
-            data = JSON.parse(customScenarios);
-            console.log('Loaded scenarios from localStorage');
-          } catch (parseError) {
-            console.error('Error parsing localStorage scenarios:', parseError);
-            // Fallback to the static file
-            const response = await fetch('/scenarios.json');
-            if (!response.ok) {
-              console.error('Failed to load scenarios:', response.status);
-              return false;
-            }
-            data = await response.json();
-          }
-        } else {
-          // No localStorage scenarios, load from file
-          console.log('No localStorage scenarios, loading from file');
-          const response = await fetch('/scenarios.json');
-          if (!response.ok) {
-            console.error('Failed to load scenarios:', response.status);
-            return false;
-          }
-          data = await response.json();
-        }
-        
-        if (!data.scenarios || !Array.isArray(data.scenarios)) {
-          console.error('Invalid scenarios data format:', data);
-          return false;
-        }
-        
-        console.log(`Loaded ${data.scenarios.length} scenarios`);
-        setScenarios(data.scenarios);
-        
-        // Find the requested scenario in the newly loaded scenarios
-        const scenario = data.scenarios.find((s: Scenario) => s.id === scenarioId);
-        if (scenario) {
-          console.log(`Found scenario: ${scenario.name}`);
-          setCurrentScenario(scenario);
-          setIsScenarioActive(true);
-          return true;
-        }
-      } catch (error) {
-        console.error('Error loading scenarios:', error);
-        return false;
-      }
-    } else {
-      console.log(`Looking for scenario ${scenarioId} in ${scenarios.length} loaded scenarios`);
-      // Find the scenario in the already loaded scenarios
-      const scenario = scenarios.find(s => s.id === scenarioId);
+    // Always reload scenarios from localStorage to ensure we have the latest data
+    const freshScenarios = await loadScenarios();
+    
+    if (freshScenarios.length > 0) {
+      console.log(`Looking for scenario ${scenarioId} in ${freshScenarios.length} loaded scenarios`);
+      // Find the scenario in the loaded scenarios
+      const scenario = freshScenarios.find((s: Scenario) => s.id === scenarioId);
       if (scenario) {
         console.log(`Found scenario: ${scenario.name}`);
         setCurrentScenario(scenario);

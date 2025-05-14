@@ -1,17 +1,61 @@
-const fs = require('fs');
-const path = require('path');
+const { createClient } = require('@netlify/functions');
+const fetch = require('node-fetch');
 
-// Path to the scenarios.json file
-const scenariosPath = path.join(__dirname, '../../public/scenarios.json');
-// Path to store the custom scenarios
-const customScenariosPath = path.join(__dirname, '../../.netlify/custom-scenarios.json');
+// In-memory storage for custom scenarios (will be lost on function cold start)
+let customScenarios = null;
 
-exports.handler = async (event, context) => {
+// Function to get the default scenarios from the public file
+async function getDefaultScenarios() {
+  try {
+    // Get the site URL from environment
+    const siteUrl = process.env.URL || 'https://epochv2.netlify.app';
+    const response = await fetch(`${siteUrl}/scenarios.json`);
+    
+    if (!response.ok) {
+      throw new Error(`Failed to fetch default scenarios: ${response.status}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching default scenarios:', error);
+    // Return a minimal valid structure if we can't fetch the defaults
+    return {
+      scenarios: [
+        {
+          id: "default-fallback",
+          name: "Default Fallback",
+          examType: "Clinic Visit",
+          patientData: {
+            patientName: "Default Patient",
+            patientDOB: "01/01/2000",
+            visitDate: "01/01/2025",
+            providerName: "Dr. Default",
+            interpreterNeeded: "No",
+            insurance: "Default Insurance",
+            preferredLab: "Default Lab",
+            previousExam: "None",
+            nextVisit: "01/01/2026"
+          },
+          clinicalData: {
+            historyOfPresentIllness: "Default history",
+            physicalExamination: "Default examination",
+            results: "Default results",
+            assessmentPlan: "Default plan",
+            attestation: "Default attestation"
+          }
+        }
+      ]
+    };
+  }
+}
+
+const handler = async (event) => {
   // Set CORS headers
   const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
+    'Content-Type': 'application/json'
   };
 
   // Handle preflight OPTIONS request
@@ -19,29 +63,28 @@ exports.handler = async (event, context) => {
     return {
       statusCode: 204,
       headers,
-      body: '',
+      body: ''
     };
   }
 
   try {
     // GET request - Read scenarios
     if (event.httpMethod === 'GET') {
-      // Check if custom scenarios exist
-      if (fs.existsSync(customScenariosPath)) {
-        const customScenarios = fs.readFileSync(customScenariosPath, 'utf8');
+      // If we have custom scenarios, return those
+      if (customScenarios) {
         return {
           statusCode: 200,
           headers,
-          body: customScenarios,
+          body: JSON.stringify(customScenarios)
         };
       }
 
-      // Fall back to the original scenarios
-      const scenarios = fs.readFileSync(scenariosPath, 'utf8');
+      // Otherwise get the default scenarios
+      const defaultScenarios = await getDefaultScenarios();
       return {
         statusCode: 200,
         headers,
-        body: scenarios,
+        body: JSON.stringify(defaultScenarios)
       };
     }
 
@@ -49,36 +92,28 @@ exports.handler = async (event, context) => {
     if (event.httpMethod === 'POST') {
       const { content } = JSON.parse(event.body);
       
-      // Validate the JSON
-      JSON.parse(content); // This will throw if invalid
+      // Parse and validate the JSON
+      const parsedContent = JSON.parse(content);
       
-      // Create the .netlify directory if it doesn't exist
-      const netlifyDir = path.join(__dirname, '../../.netlify');
-      if (!fs.existsSync(netlifyDir)) {
-        fs.mkdirSync(netlifyDir, { recursive: true });
-      }
-      
-      // Write the custom scenarios
-      fs.writeFileSync(customScenariosPath, content);
+      // Store the custom scenarios in memory
+      customScenarios = parsedContent;
       
       return {
         statusCode: 200,
         headers,
-        body: JSON.stringify({ message: 'Scenarios saved successfully' }),
+        body: JSON.stringify({ message: 'Scenarios saved successfully' })
       };
     }
 
     // DELETE request - Reset scenarios
     if (event.httpMethod === 'DELETE') {
-      // Delete the custom scenarios if they exist
-      if (fs.existsSync(customScenariosPath)) {
-        fs.unlinkSync(customScenariosPath);
-      }
+      // Clear the custom scenarios
+      customScenarios = null;
       
       return {
         statusCode: 200,
         headers,
-        body: JSON.stringify({ message: 'Scenarios reset successfully' }),
+        body: JSON.stringify({ message: 'Scenarios reset successfully' })
       };
     }
 
@@ -86,7 +121,7 @@ exports.handler = async (event, context) => {
     return {
       statusCode: 405,
       headers,
-      body: JSON.stringify({ message: 'Method not allowed' }),
+      body: JSON.stringify({ message: 'Method not allowed' })
     };
   } catch (error) {
     console.error('Error in scenarios function:', error);
@@ -94,7 +129,9 @@ exports.handler = async (event, context) => {
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ message: `Error: ${error.message}` }),
+      body: JSON.stringify({ message: `Error: ${error.message}` })
     };
   }
 };
+
+exports.handler = handler;

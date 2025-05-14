@@ -174,6 +174,7 @@ const ExamSection = ({ examType, setExamType }: ExamSectionProps) => {
               <option value="Flowsheets">Flowsheets</option>
               <option value="Wrap Up">Wrap Up</option>
               <option value="Procedure Note">Procedure Note</option>
+              <option value="Reason for Documentation">Reason for Documentation</option>
             </select>
           </div>
         </div>
@@ -285,7 +286,43 @@ const ExamSection = ({ examType, setExamType }: ExamSectionProps) => {
 
                 
 
-                {examType === "Eye Exam" ? (
+                {examType === "Reason for Documentation" ? (
+                  <div className="space-y-4">
+                    <div className="border rounded">
+                      <div className="bg-gray-200 p-1 font-semibold flex justify-between items-center">
+                        <span>Reason for Documentation</span>
+                        <button className="text-blue-600 text-xs">Add</button>
+                      </div>
+                      <div className="p-2">
+                        <div className="grid grid-cols-2 gap-2">
+                          {[
+                            "Annual Exam", "Abscess",
+                            "Bilateral Cleft Palate", "Biopsy",
+                            "Cleft Lip", "Cleft Palate",
+                            "Dental Filling", "Dental Injury",
+                            "Dental Pain", "Dental Problem",
+                            "Dry Mouth", "Facial Pain",
+                            "Gingivitis", "Headache",
+                            "Jaw Pain", "Mouth Injury",
+                            "Mouth Lesions", "Oral Pain",
+                            "Oral Swelling", "Routine Oral Cleaning",
+                            "Sleep Apnea", "Broken Filling",
+                            "Broken Tooth", "Seek Comprehensive Care",
+                            "Sensitivity", "Bleeding Gums",
+                            "Loose Tooth", "Loose Partial or Complete Denture",
+                            "Bad Breath", "Fill Out School Form",
+                            "Cosmetics", "Ortho",
+                            "Temporomandibular Disorder", "Other"
+                          ].map((reason) => (
+                            <button key={reason} className={`border rounded p-3 text-sm bg-gradient-to-r from-blue-200 to-white hover:opacity-80`}>
+                              {reason}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : examType === "Eye Exam" ? (
                   <>
                     <div className="exam-section">
                       <h3 className="exam-header">Slit Lamp</h3>
